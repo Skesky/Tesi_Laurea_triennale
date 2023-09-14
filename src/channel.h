@@ -10,7 +10,7 @@ class Channel{
 
     public:
     Channel();
-    cState trasmission(cState state, default_random_engine gen);
+    chrntState trasmission(chrntState state);
 };
  
 #endif 

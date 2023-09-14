@@ -1,10 +1,15 @@
-#include "costanti.h"
-
 #include <random>
 #include <cmath>
 #include <unistd.h>
 #include <vector>
+#include <iostream>
 
+#include "costanti.h"
+#include "alice.h"
+#include "bob.h"
+#include "channel.h"
+
+using namespace std;
 
 double gFuntion(double ni){
 
@@ -72,6 +77,32 @@ vector<double> estinationParamABC(double bPm, double sp){
 
 }
 
+/*
+*
+*
+*
+*
+*   Sifting
+*
+*
+*
+*
+*/
+
+void sifter(State *aSitfed, State *bob, chrntState *alice){
+
+    for(int i = 0; i < N_ROUND; i++){
+        if(bob[i].flag == q){
+            aSitfed[i].component = alice[i].q.component;
+            aSitfed[i].variance = alice[i].q.variance;
+            aSitfed[i].flag = q;
+        } else{
+            aSitfed[i].component = alice[i].p.component;
+            aSitfed[i].variance = alice[i].p.variance;
+            aSitfed[i].flag = p;
+        }
+    }
+}
 int main(){
     std::random_device rd;
     
@@ -80,27 +111,40 @@ int main(){
     Bob b;
     double sumProd;
 
+    chrntState *aliceStates = (chrntState*) malloc(N_ROUND * sizeof(chrntState));
+    State *bobStates = (State*) malloc(N_ROUND * sizeof(State));
+
     fstream outputFile("coherent_states.csv");
 	outputFile << "Q_Mean,P_Mean,Variance;Measured_real;Measured_imag" << std::endl;
     
     for(int i = 0; i<N_ROUND; i++){
         std::default_random_engine generator(rd());
-        Stato aliceState = a.chooseState(generator);
+        chrntState aliceState = a.chooseState(generator);
+        aliceStates[i] = aliceState;
+        
         //state = a.chooseState(generator);
-        complex<double> bobState = b.measure(c.trasmission(aliceState, generator), generator);
-
+        State bobState = b.measure(c.trasmission(aliceState), generator);
+        bobStates[i] = bobState;
         //somma dei prodotti delle componenti q di alice e bob
-        sumProd += (aliceState.qMean *  bobState.real());
+        //sumProd += (aliceState.q.component *  bobState.component);
 
-        outputFile << aliceState.qMean << ',' << aliceState.pMean << ',' << aliceState.variance << ";" 
-                   << bobState.real() << ";" << bobState.imag() << std::endl;
+        outputFile << aliceState.q.component << ',' << aliceState.p.component << ',' << aliceState.p.variance << ";" 
+                   << bobState.component << ";" << bobState.variance << std::endl;
 
-        std::cout << bobState.real() << "," << bobState.imag() << std::endl;
+        std::cout << bobState.component << "," << bobState.variance << ',' << bobState.flag << std::endl;
         
     }
     outputFile.close();
 
-    double bPm = (CHANNEL_LOSS / MU) * VARIANZA + 1.0 + (NOISE / MU);
+    State *aliceSifted = (State*) malloc(N_ROUND * sizeof(State));
+
+    sifter(aliceSifted, bobStates, aliceStates);
+
+    for(int i = 0; i < N_ROUND; i++){
+        cout <<aliceSifted[i].flag<< "==" << bobStates[i].flag << endl;
+    }
+
+    /*double bPm = (CHANNEL_LOSS / MU) * VARIANZA + 1.0 + (NOISE / MU);
 
     vector<double> param = estinationParamABC(bPm, sumProd);
     vector<double> ni = niCalc(param[0], param[1], param[2]);
@@ -108,12 +152,12 @@ int main(){
     double chiEveBob = mutInfoEveBob(param[0], param[1], param[2]);
     double infoAliceBob = mutualInfoAliceBob();
 
-    double cEB = sqrt(CHANNEL_LOSS) * sqrt((pow(VARIANZA, 2) + (2 * VARIANZA)));
+    double cEB = sqrt(CHANNEL_LOSS) * sqrt((pow(VARIANZA, 2) + (2 * VARIANZA)));*/
 
-    std::cout << "Informazione tra Eve e Bob " << chiEveBob << endl; 
-    std::cout << "Informazione tra Alice e Bob " << infoAliceBob << endl;
-    std::cout << "Rapporto segnale rumore " << signalNoiseRatio() << endl;
-    std:: cout << "cEB " << cEB << endl;
+    //std::cout << "Informazione tra Eve e Bob " << chiEveBob << endl; 
+    //std::cout << "Informazione tra Alice e Bob " << infoAliceBob << endl;
+    //std::cout << "Rapporto segnale rumore " << signalNoiseRatio() << endl;
+    //std:: cout << "cEB " << cEB << endl;
 
     
     return 0;

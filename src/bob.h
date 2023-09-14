@@ -8,14 +8,14 @@ class Bob{
     private:
     normal_distribution<> d_q;
     normal_distribution<> d_p;
-    uniform_int_distribution<> distribition;
+    uniform_int_distribution<> distribution;
     public:
     Bob();
-    double measure(cState state, default_random_engine gen);
+    State measure(chrntState state, default_random_engine gen);
     int selectMeasure();
 
     private:
-    void gaussianSetting(cState state);
+    void gaussianSetting(chrntState state);
 };
  
 #endif 

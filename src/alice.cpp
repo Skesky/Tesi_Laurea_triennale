@@ -41,12 +41,12 @@ chrntState Alice::chooseState(default_random_engine gen){
     //state.imag(discrete(distribution(gen)));
 
     //inizializzazione componente q
-    s.q.flag = qA;
+    s.q.flag = q;
     s.q.component = distribution(gen);
     s.q.variance = 1;
 
     //inizializzazione componente p
-    s.p.flag = pA;
+    s.p.flag = p;
     s.p.component = distribution(gen);
     s.p.variance = 1;
     

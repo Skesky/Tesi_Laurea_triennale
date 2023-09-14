@@ -10,7 +10,7 @@
 
 #include "costanti.h"
 
-struct CoherentState{
+typedef struct CoherentState{
     State q;
     State p;
 } chrntState;
