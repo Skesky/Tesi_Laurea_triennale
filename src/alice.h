@@ -8,12 +8,12 @@
 #include <fstream>
 #include <cmath>
 
-typedef struct CoherentState{
-    double qMean;
-    double pMean;
-    double variance;
+#include "costanti.h"
 
-} cState;
+struct CoherentState{
+    State q;
+    State p;
+} chrntState;
  
 class Alice{
 
@@ -24,7 +24,7 @@ class Alice{
     public: 
     Alice();
     double discrete(double n);
-    cState chooseState(std::default_random_engine gen);
+    chrntState chooseState(std::default_random_engine gen);
 };
  
 #endif 

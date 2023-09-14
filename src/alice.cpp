@@ -34,17 +34,22 @@ Alice::Alice() : distribution(0, VARIANZA * 4){
 
 }*/
 
-cState Alice::chooseState(default_random_engine gen){
+chrntState Alice::chooseState(default_random_engine gen){
     
-    cState state;
+    chrntState s;
     //state.real(discrete(distribution(gen)));
     //state.imag(discrete(distribution(gen)));
 
+    //inizializzazione componente q
+    s.q.flag = qA;
+    s.q.component = distribution(gen);
+    s.q.variance = 1;
 
+    //inizializzazione componente p
+    s.p.flag = pA;
+    s.p.component = distribution(gen);
+    s.p.variance = 1;
+    
 
-    state.qMean = distribution(gen);
-    state.pMean = distribution(gen);
-    state.variance = 1.0;
-
-    return state;
+    return s;
 }

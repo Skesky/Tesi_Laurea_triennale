@@ -15,4 +15,12 @@
 #define NOISE 1.0
 #define N_ROUND 100000
 
+enum quadratures {qA, pA, qB, pB};
+
+struct State{
+    quadratures flag;  
+    double component;
+    double variance;
+};
+
 #endif

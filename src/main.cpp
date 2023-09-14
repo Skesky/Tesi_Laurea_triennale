@@ -85,7 +85,7 @@ int main(){
     
     for(int i = 0; i<N_ROUND; i++){
         std::default_random_engine generator(rd());
-        cState aliceState = a.chooseState(generator);
+        Stato aliceState = a.chooseState(generator);
         //state = a.chooseState(generator);
         complex<double> bobState = b.measure(c.trasmission(aliceState, generator), generator);
 

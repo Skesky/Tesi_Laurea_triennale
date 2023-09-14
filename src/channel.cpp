@@ -15,7 +15,7 @@ cState Channel::trasmission(cState state, default_random_engine gen){
 
     s.qMean = state.qMean * sqrt(CHANNEL_LOSS);
     s.pMean = state.pMean * sqrt(CHANNEL_LOSS);
-    s.variance = (state.variance * CHANNEL_LOSS ) + NOISE * (state.variance - CHANNEL_LOSS);
+    s.variance = 1 + NOISE;
 
     return s;
 
