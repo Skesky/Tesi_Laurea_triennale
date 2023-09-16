@@ -5,12 +5,12 @@
 #include <random>
 
 using namespace std;
- 
+
 class Channel{
 
     public:
     Channel();
-    chrntState trasmission(chrntState state);
+    State trasmission(State state);
 };
  
 #endif 

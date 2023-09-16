@@ -3,19 +3,22 @@
 #include <unistd.h>
 #include <vector>
 #include <iostream>
+#include <utility>
+#include <string>
 
 #include "costanti.h"
 #include "alice.h"
 #include "bob.h"
 #include "channel.h"
+#include "simulation.h"
 
 using namespace std;
 
 double gFuntion(double ni){
 
     
-    double a = ((ni + 1)/2);
-    double b = ((ni - 1)/2);
+    double a = ((ni + 1)/2.0);
+    double b = ((ni - 1)/2.0);
         
     return (a * log2(a)) - (b * log2(b));
 
@@ -35,31 +38,9 @@ vector<double> niCalc(double a, double b, double c){
 
     ni.push_back(0.5 * (z +(b - a)));       //ni1
     ni.push_back(0.5 * (z -(b - a)));       //ni2
-    ni.push_back(a - (pow(c, 2)/(b + 1)));  //ni3
+    ni.push_back(a - (pow(c, 2)/(b + 1.0)));  //ni3
 
     return ni;
-
-}
-
-//calcolo della media del prodotto tra la componente q di Alice 
-//e quella misurata da Bob
-double meanQstate(double sp){
-    
-    std::cout << "MeanQState: " << sp/N_ROUND << endl;
-
-    return sp / N_ROUND;
-
-}
-
-//stima dei parametri a, b, c per il calcolo dei ni
-vector<double> estinationParamABC(double bPm, double sp){
-    vector<double> param;
-    
-    param.push_back(VARIANZA + 1); // a
-    param.push_back(MU * bPm - MU + 1); //b 
-    param.push_back(sqrt((VARIANZA + 2) / VARIANZA) * sqrt(MU) * meanQstate(sp)); // c
-    
-    return param;
 
 }
 
@@ -85,17 +66,16 @@ double signalNoiseRatio(double channelLoss, double noise){
 //calcolo informazione mutua tra Alice e Bob -------
 double mutualInfoAliceBob(double channelLoss, double noise){
 
-    return (MU/2) * log2(1.0 + signalNoiseRatio(channelLoss, noise));
+    return (MU/2.0) * log2(1.0 + signalNoiseRatio(channelLoss, noise));
 
 }
 
 //calcolo valor quadratico medio
-double meanSquareValue(double* comp){
+double meanSquareValue(vector<double> comp){
 
     double msv;
-    int dim = sizeof(comp) / sizeof(double);
 
-    for(int i = 0; i < dim; i++){
+    for(int i = 0; i < (int)comp.size(); i++){
         msv += pow(comp[i],2);
     }
 
@@ -103,41 +83,39 @@ double meanSquareValue(double* comp){
 }
 
 //calcolo del valor medio dei prodotti delle componenti
-double meanProdValue(double* compA, double* compB){
+double meanProdValue(vector<double> compA, vector<double> compB){
 
     double msp;
 
-    int dim = sizeof(compA) / sizeof(double);
-
-    for(int i = 0; i < dim; i++){
+    for(int i = 0; i < (int)compA.size(); i++){
         msp += compA[i] * compB[i];
     }
 
-
     return msp / (double)N_ROUND;
 }
-void parameterEstimation(double *parameter, double *noise, double *channelLoss, State *aliceSifted, State *bobStates, 
-                            double* aliceQs, double* alicePs, double* bobQs, double* bobPs){
+void parameterEstimation(double *parameter, double *noise, double *channelLoss, vector<vector<double>> sifted){
 
     //stima parametro a
-    double vMod = VARIANZA * 4.0;
-    parameter[1] = vMod + 1.0;
+    parameter[0] = VARIANZA + 1.0;
+     cout << "Parametro a: "<< parameter[0] << endl;
 
     //stima parametro b
-    double msvqBob = meanSquareValue(bobQs);
-    double msvpBob = meanSquareValue(bobPs);
-    parameter[2] = (msvpBob + msvpBob) / 2.0;
+    double msvqBob = meanSquareValue(sifted[2]);
+    double msvpBob = meanSquareValue(sifted[3]);
+    parameter[1] = (msvqBob + msvpBob) / 2.0;
+     cout << "Parametro b: "<< parameter[1] << endl;
 
     //stima parametro c
-    double mpValueq = meanProdValue(aliceQs, bobQs);
-    double mpValuep = meanProdValue(alicePs, bobPs);
-    parameter[3] = sqrt((vMod + 2.0)/vMod) * ((mpValueq + mpValuep) / 2.0);
+    double mpValueq = meanProdValue(sifted[0], sifted[2]);
+    double mpValuep = meanProdValue(sifted[1], sifted[3]);
+    parameter[2] = sqrt((VARIANZA + 2.0)/VARIANZA) * ((mpValueq + mpValuep) / 2.0);
+    cout << "Parametro c: "<< parameter[2] << endl;
 
     //stima trasmittanza
-    *channelLoss = pow(parameter[3], 2) / (pow(vMod, 2) + 2.0 * vMod);
+    *channelLoss = pow(parameter[2], 2) / (pow(VARIANZA, 2) + 2.0 * VARIANZA);
 
     //stima rumore
-    *noise = parameter[2] - ((*channelLoss) * vMod) - 1.0;
+    *noise = parameter[1] - ((*channelLoss) * VARIANZA) - 1.0;
 }
 
 /*
@@ -152,106 +130,64 @@ void parameterEstimation(double *parameter, double *noise, double *channelLoss, 
 *
 */
 
-void sifter(State *aSitfed, State *bob, chrntState *alice, double* aliceQs, double* alicePs, double* bobQs, double* bobPs){
+vector<vector<double>> sifter(pair<double, Component> *bob, State *alice){
 
-    int qCount = 1;
-    int pCount = 1;
+    vector<double> aliceQs;
+    vector<double> alicePs;
+    vector<double> bobQs;
+    vector<double> bobPs;
 
     for(int i = 0; i < N_ROUND; i++){
-        if(bob[i].flag == q){
-            bobQs = (double*)realloc(bobQs, qCount * sizeof(double));
-            bobQs[i] = bob[i].component; 
+        if(bob[i].second == q){
+            bobQs.push_back(bob[i].first);
 
-            aliceQs = (double*)realloc(aliceQs, qCount * sizeof(double));
-            aliceQs[i] = alice[i].q.component; 
+            aliceQs.push_back(alice[i].q.value);
 
-            aSitfed[i].component = alice[i].q.component;
-            aSitfed[i].variance = alice[i].q.variance;
-            aSitfed[i].flag = q;
-
-            qCount ++;
         } else{
-            bobPs = (double*)realloc(bobPs, pCount * sizeof(double));
-            bobPs[i] = bob[i].component; 
+            bobPs.push_back(bob[i].first);
 
-            alicePs = (double*)realloc(alicePs, qCount * sizeof(double));
-            alicePs[i] = alice[i].p.component; 
+            alicePs.push_back(alice[i].p.value); 
 
-            aSitfed[i].component = alice[i].p.component;
-            aSitfed[i].variance = alice[i].p.variance;
-            aSitfed[i].flag = p;
-
-            pCount++;
         }
     }
+    vector<vector<double>> sifted;
+    sifted.push_back(aliceQs);
+    sifted.push_back(alicePs);
+    sifted.push_back(bobQs);
+    sifted.push_back(bobPs);
+
+    return sifted;
 }
 int main(){
-    std::random_device rd;
     
-    Alice a;
-    Channel c;
-    Bob b;
-    double sumProd;
+    Simulation sim(N_ROUND, "coherent_states");
 
-    chrntState *aliceStates = (chrntState*) malloc(N_ROUND * sizeof(chrntState));
-    State *bobStates = (State*) malloc(N_ROUND * sizeof(State));
+    sim.startSimulation();
 
-    fstream outputFile("coherent_states.csv");
-	outputFile << "Q_Mean,P_Mean,Variance;Measured_real;Measured_imag" << std::endl;
-    
-    for(int i = 0; i<N_ROUND; i++){
-        std::default_random_engine generator(rd());
-
-        chrntState aliceState = a.chooseState(generator);
-        aliceStates[i] = aliceState;
-        
-        State bobState = b.measure(c.trasmission(aliceState), generator);
-        bobStates[i] = bobState;
-
-        outputFile << aliceState.q.component << ',' << aliceState.p.component << ',' << aliceState.p.variance << ";" 
-                   << bobState.component << ";" << bobState.variance << std::endl;
-
-        std::cout << bobState.component << "," << bobState.variance << ',' << bobState.flag << std::endl;
-        
-    }
-    outputFile.close();
-
-    State *aliceSifted = (State*) malloc(N_ROUND * sizeof(State));
-
-    double *aliceQs = (double*) malloc(sizeof(double));
-    double *alicePs = (double*) malloc(sizeof(double));
-    double *bobQs = (double*) malloc(sizeof(double));
-    double *bobPs = (double*) malloc(sizeof(double));
-
-    sifter(aliceSifted, bobStates, aliceStates, aliceQs, alicePs, bobQs, bobPs);
-
-    for(int i = 0; i < N_ROUND; i++){
-        cout << aliceSifted[i].component << ' ' << bobStates[i].component << endl;
-        cout <<aliceSifted[i].flag<< "==" << bobStates[i].flag << endl;
-    }
+    vector<vector<double>> sifted = sifter(sim.getBobMeasures(), sim.getAliceStates());
 
     double *parameter = (double*) malloc(3 * sizeof(double));
-    double *noise;
-    double *channelLoss;
+    double *noise = (double*) malloc(sizeof(double));
+    double *channelLoss = (double*) malloc(sizeof(double));
 
 
-    parameterEstimation(parameter, noise, channelLoss, aliceSifted, bobStates, aliceQs, alicePs, bobQs, bobPs);
+    parameterEstimation(parameter, noise, channelLoss, sifted);
 
-    /*double bPm = (CHANNEL_LOSS / MU) * VARIANZA + 1.0 + (NOISE / MU);
 
-    vector<double> param = estinationParamABC(bPm, sumProd);
-    vector<double> ni = niCalc(param[0], param[1], param[2]);
+    cout << "Paramentro b: " << parameter[1] << " Valore che ci aspettiamo: " << *channelLoss * VARIANZA + 1.0 + *noise << endl;
 
-    double chiEveBob = mutInfoEveBob(param[0], param[1], param[2]);
+    vector<double> ni = niCalc(parameter[0], parameter[1], parameter[2]);
+
+    double chiEveBob = mutInfoEveBob(ni[0], ni[1], ni[2]);
     double infoAliceBob = mutualInfoAliceBob(*channelLoss, *noise);
 
-    double cEB = sqrt(CHANNEL_LOSS) * sqrt((pow(VARIANZA, 2) + (2 * VARIANZA)));*/
-
-    //std::cout << "Informazione tra Eve e Bob " << chiEveBob << endl; 
-    //std::cout << "Informazione tra Alice e Bob " << infoAliceBob << endl;
+    std::cout << "Informazione tra Eve e Bob " << chiEveBob << endl; 
+    std::cout << "Informazione tra Alice e Bob " << infoAliceBob << endl;
     std::cout << "Rapporto segnale rumore " << signalNoiseRatio(*channelLoss, *noise) << endl;
-    //std:: cout << "cEB " << cEB << endl;
 
+    free(parameter);
+    free(noise);
+    free(channelLoss);
     
     return 0;
 

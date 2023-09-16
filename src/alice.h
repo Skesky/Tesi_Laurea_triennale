@@ -10,21 +10,19 @@
 
 #include "costanti.h"
 
-typedef struct CoherentState{
-    State q;
-    State p;
-} chrntState;
+struct State{
+    Quadr q;
+    Quadr p;
+};
  
 class Alice{
 
     private:
-    //std::complex<double> *states;
     std::normal_distribution<> distribution;
 
     public: 
     Alice();
-    double discrete(double n);
-    chrntState chooseState(std::default_random_engine gen);
+    State chooseState(std::default_random_engine gen);
 };
  
 #endif 

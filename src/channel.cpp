@@ -9,12 +9,12 @@ Channel::Channel(){
     cout << "Sono Channel \n";
 }
 
-chrntState Channel::trasmission(chrntState state){
+State Channel::trasmission(State state){
 
-    chrntState s;
+    State s;
 
-    s.q.component = state.q.component * sqrt(CHANNEL_LOSS);
-    s.p.component = state.p.component * sqrt(CHANNEL_LOSS);
+    s.q.value = state.q.value * sqrt(CHANNEL_LOSS);
+    s.p.value = state.p.value * sqrt(CHANNEL_LOSS);
 
     s.q.variance = 1 + NOISE;
     s.p.variance = 1 + NOISE;
