@@ -10,44 +10,22 @@
 
 using namespace std;
 
-Alice::Alice() : distribution(0, VARIANZA * 4){
+Alice::Alice() : distribution(0, VARIANZA/4.0){
     cout << "Sono Alice \n";
 }
 
-/*double Alice::discrete(double a){
-    double num = 0;
-    double n = abs(a);
-    cout << n << endl;
- 
+State Alice::chooseState(default_random_engine gen){
     
-        
-    while(num < n){
-
-        if((num + BIN_DIM) > n)
-            return num;
-
-        num = num + BIN_DIM;
-        cout << num << endl;
-    }
-    
-    return num;
-
-}*/
-
-chrntState Alice::chooseState(default_random_engine gen){
-    
-    chrntState s;
-    //state.real(discrete(distribution(gen)));
-    //state.imag(discrete(distribution(gen)));
+    State s;
 
     //inizializzazione componente q
     s.q.flag = q;
-    s.q.component = distribution(gen);
+    s.q.value = distribution(gen);
     s.q.variance = 1;
 
     //inizializzazione componente p
     s.p.flag = p;
-    s.p.component = distribution(gen);
+    s.p.value = distribution(gen);
     s.p.variance = 1;
     
 

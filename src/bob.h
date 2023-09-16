@@ -11,11 +11,10 @@ class Bob{
     uniform_int_distribution<> distribution;
     public:
     Bob();
-    State measure(chrntState state, default_random_engine gen);
-    int selectMeasure();
+    pair<double, Component> measure(State state, default_random_engine gen);
 
     private:
-    void gaussianSetting(chrntState state);
+    void gaussianSetting(State state);
 };
  
 #endif 
