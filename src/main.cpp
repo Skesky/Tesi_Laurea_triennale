@@ -171,7 +171,7 @@ void sifter(State *aSitfed, State *bob, chrntState *alice, double* aliceQs, doub
 
             qCount ++;
         } else{
-            bobPs = (double*)realloc(bobPs, qCount * sizeof(double));
+            bobPs = (double*)realloc(bobPs, pCount * sizeof(double));
             bobPs[i] = bob[i].component; 
 
             alicePs = (double*)realloc(alicePs, qCount * sizeof(double));

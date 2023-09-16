@@ -13,8 +13,8 @@ Bob::Bob() : distribution(0,1){
 
 void Bob::gaussianSetting(chrntState state){
 
-    d_q = normal_distribution<double>{sqrt(CHANNEL_LOSS) * state.q.component, state.q.variance + NOISE};
-    d_p = normal_distribution<double>{sqrt(CHANNEL_LOSS) * state.p.component, state.p.variance + NOISE};
+    d_q = normal_distribution<double>{ state.q.component, state.q.variance };
+    d_p = normal_distribution<double>{ state.p.component, state.p.variance };
 }
 
 /*int Bob::selectMeasure(default_random_engine gen){
