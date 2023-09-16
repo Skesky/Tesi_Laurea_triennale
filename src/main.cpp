@@ -4,7 +4,10 @@
 #include <vector>
 #include <iostream>
 #include <utility>
+<<<<<<< HEAD
 #include <string>
+=======
+>>>>>>> 762e90d50e34ef1bbdc7f5db9f136984f88ec9bb
 
 #include "costanti.h"
 #include "alice.h"
@@ -159,12 +162,13 @@ vector<vector<double>> sifter(pair<double, Component> *bob, State *alice){
     return sifted;
 }
 int main(){
-    
+
     Simulation sim(N_ROUND, "coherent_states");
 
     sim.startSimulation();
 
     vector<vector<double>> sifted = sifter(sim.getBobMeasures(), sim.getAliceStates());
+
 
     double *parameter = (double*) malloc(3 * sizeof(double));
     double *noise = (double*) malloc(sizeof(double));
