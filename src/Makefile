@@ -1,7 +1,8 @@
 all: main
 
 main:
-	g++ main.cpp alice.cpp bob.cpp channel.cpp -O3 -o simulazione
+	touch coherent_states.csv
+	g++  *.cpp -Wall -O3 -o simulazione
 
 .PHONY: clean
 

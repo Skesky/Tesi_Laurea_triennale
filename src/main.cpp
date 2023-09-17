@@ -4,16 +4,14 @@
 #include <vector>
 #include <iostream>
 #include <utility>
-<<<<<<< HEAD
 #include <string>
-=======
->>>>>>> 762e90d50e34ef1bbdc7f5db9f136984f88ec9bb
 
 #include "costanti.h"
 #include "alice.h"
 #include "bob.h"
 #include "channel.h"
 #include "simulation.h"
+#include "paramEstimation.h"
 
 using namespace std;
 
@@ -164,10 +162,14 @@ vector<vector<double>> sifter(pair<double, Component> *bob, State *alice){
 int main(){
 
     Simulation sim(N_ROUND, "coherent_states");
+    ParamEstimation param(N_ROUND);
 
     sim.startSimulation();
 
-    vector<vector<double>> sifted = sifter(sim.getBobMeasures(), sim.getAliceStates());
+    param.sifter(sim.getBobMeasures(), sim.getAliceStates());
+    param.parameterEstimation();
+
+    /*vector<vector<double>> sifted = sifter(sim.getBobMeasures(), sim.getAliceStates());
 
 
     double *parameter = (double*) malloc(3 * sizeof(double));
@@ -183,15 +185,13 @@ int main(){
     vector<double> ni = niCalc(parameter[0], parameter[1], parameter[2]);
 
     double chiEveBob = mutInfoEveBob(ni[0], ni[1], ni[2]);
-    double infoAliceBob = mutualInfoAliceBob(*channelLoss, *noise);
+    double infoAliceBob = mutualInfoAliceBob(*channelLoss, *noise);*/
 
-    std::cout << "Informazione tra Eve e Bob " << chiEveBob << endl; 
-    std::cout << "Informazione tra Alice e Bob " << infoAliceBob << endl;
-    std::cout << "Rapporto segnale rumore " << signalNoiseRatio(*channelLoss, *noise) << endl;
+    cout << "Paramentro b: " << param.getParameter()[1] << " Valore che ci aspettiamo: " << param.getChannelLoss() * VARIANZA + 1.0 + param.getNoise() << endl;
 
-    free(parameter);
-    free(noise);
-    free(channelLoss);
+    std::cout << "Informazione tra Eve e Bob " << param.getInfoEveBob() << endl; 
+    std::cout << "Informazione tra Alice e Bob " << param.getInfoAliceBob() << endl;
+    std::cout << "Rapporto segnale rumore " << param.signalNoiseRatio() << endl;
     
     return 0;
 

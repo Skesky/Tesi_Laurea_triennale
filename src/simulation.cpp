@@ -16,7 +16,7 @@ Simulation::Simulation(int round, string fileName){
     this->alice = Alice();
     this->bob = Bob();
     this->channel = Channel();
-    this->outputFile.open(fileName + ".csv"); 
+    this->outputFile.open(fileName + ".csv", ios::out | ios::in); 
     this->aliceStates = (State*) malloc(N_ROUND * sizeof(State));
     this->bobMeasures = (pair<double, Component>*) malloc(N_ROUND * sizeof(pair<double, Component>));
 }
