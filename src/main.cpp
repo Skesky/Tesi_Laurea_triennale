@@ -5,6 +5,7 @@
 #include <iostream>
 #include <utility>
 #include <string>
+#include <bitset>
 
 #include "costanti.h"
 #include "alice.h"

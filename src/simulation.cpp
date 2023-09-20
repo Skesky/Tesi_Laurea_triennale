@@ -2,6 +2,7 @@
 #include <utility>
 #include <iostream>
 #include <fstream>
+#include <bitset>
 
 #include "alice.h"
 #include "bob.h"
@@ -45,6 +46,9 @@ void Simulation::startSimulation(){
         //cout << i << "--"<< bobMeasures[i].first << "," << bobMeasures[i].second << endl;
         
     }
+    std::default_random_engine generator(this->rd());
+
+    bob.genBitString(generator);
     
     outputFile.close();
 }

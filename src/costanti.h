@@ -2,7 +2,7 @@
 #define COSTANTI
  
 
-#define VARIANZA 0.923
+#define VARIANZA 0.924444
 #define MU 1.0
 #define CHANNEL_LOSS 0.9
 #define NOISE 0.6

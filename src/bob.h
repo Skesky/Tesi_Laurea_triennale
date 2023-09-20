@@ -9,9 +9,11 @@ class Bob{
     normal_distribution<> d_q;
     normal_distribution<> d_p;
     uniform_int_distribution<> distribution;
+
     public:
     Bob();
     pair<double, Component> measure(State state, default_random_engine gen);
+    bitset<15> genBitString(default_random_engine);
 
     private:
     void gaussianSetting(State state);
