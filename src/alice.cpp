@@ -10,7 +10,7 @@
 
 using namespace std;
 
-Alice::Alice() : distribution(0, VARIANZA/4.0){
+Alice::Alice() : distribution(0, sqrt(VARIANZA)){
     cout << "Sono Alice \n";
 }
 

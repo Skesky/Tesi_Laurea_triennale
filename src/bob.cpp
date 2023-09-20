@@ -14,8 +14,8 @@ Bob::Bob() : distribution(0,1){
 
 void Bob::gaussianSetting(State state){
 
-    d_q = normal_distribution<double>{ state.q.value, state.q.variance };
-    d_p = normal_distribution<double>{ state.p.value, state.p.variance };
+    d_q = normal_distribution<double>{ state.q.value, sqrt(state.q.variance)};
+    d_p = normal_distribution<double>{ state.p.value, sqrt(state.p.variance)};
 }
 
 //se coin e' uguale ad 1 viene misurata la q mentre viene misurata la p se uguale a 0

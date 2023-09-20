@@ -13,9 +13,6 @@ using namespace std;
 
 Simulation::Simulation(int round, string fileName){
     this->nRound = round;
-    this->alice = Alice();
-    this->bob = Bob();
-    this->channel = Channel();
     this->outputFile.open(fileName + ".csv", ios::out | ios::in); 
     this->aliceStates = (State*) malloc(N_ROUND * sizeof(State));
     this->bobMeasures = (pair<double, Component>*) malloc(N_ROUND * sizeof(pair<double, Component>));
@@ -45,7 +42,7 @@ void Simulation::startSimulation(){
         outputFile << aliceStates[i].q.value << ',' << aliceStates[i].p.value << ',' << aliceStates[i].p.value << ";" 
                    << bobMeasures[i].first << ";" << bobMeasures[i].second << endl;
 
-        cout << i << "--"<< bobMeasures[i].first << "," << bobMeasures[i].second << endl;
+        //cout << i << "--"<< bobMeasures[i].first << "," << bobMeasures[i].second << endl;
         
     }
     

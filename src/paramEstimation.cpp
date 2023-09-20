@@ -64,7 +64,8 @@ void ParamEstimation::niCalc(){
 
     this->ni.push_back(0.5 * (z +(parameter[1] - parameter[0])));       //ni1
     this->ni.push_back(0.5 * (z -(parameter[1] - parameter[0])));       //ni2
-    this->ni.push_back(parameter[0] - (pow(parameter[2], 2)/(parameter[1] + 1.0)));  //ni3
+    //this->ni.push_back(parameter[0] - (pow(parameter[2], 2)/(parameter[1] + 1.0)));  
+    this->ni.push_back(sqrt(parameter[0] * (parameter[0] - (pow(parameter[2],2) / parameter[1])))); //ni3
 }
 
 //calcolo valor quadratico medio
@@ -76,7 +77,7 @@ double ParamEstimation::meanSquareValue(vector<double> comp){
         msv += pow(comp[i],2);
     }
 
-    return msv / (double)nRound;
+    return msv / (double)nRound/*comp.size()*/;
 }
 
 //calcolo del valor medio dei prodotti delle componenti
@@ -88,13 +89,14 @@ double ParamEstimation::meanProdValue(vector<double> compA, vector<double> compB
         msp += compA[i] * compB[i];
     }
 
-    return msp / (double)nRound;
+    return msp / (double)nRound/*compA.size()*/;
 }
 
 //SNR
 double ParamEstimation::signalNoiseRatio(){
     
-    return ((1.0/MU) * this->channelLoss * VARIANZA)/(1.0 + ((1.0/MU) * this->noise)); 
+    //return ((1.0/MU) * this->channelLoss * sqrt(VARIANZA))/(1.0 + ((1.0/MU) * this->noise));
+    return ((1.0/MU) * CHANNEL_LOSS * VARIANZA)/(1.0 + ((1.0/MU) * NOISE)); 
 
 }
 
