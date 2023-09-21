@@ -3,10 +3,10 @@
  
 
 #define VARIANZA 0.924444
-#define MU 1.0
-#define CHANNEL_LOSS 0.9
+#define MU 2.0
+#define CHANNEL_LOSS 0.7
 #define NOISE 0.6
-#define N_ROUND 100000
+#define N_ROUND 1000
 
 enum Component {q, p};
 

@@ -77,7 +77,7 @@ double ParamEstimation::meanSquareValue(vector<double> comp){
         msv += pow(comp[i],2);
     }
 
-    return msv / (double)nRound/*comp.size()*/;
+    return msv / (double)/*nRound*/comp.size();
 }
 
 //calcolo del valor medio dei prodotti delle componenti
@@ -89,7 +89,7 @@ double ParamEstimation::meanProdValue(vector<double> compA, vector<double> compB
         msp += compA[i] * compB[i];
     }
 
-    return msp / (double)nRound/*compA.size()*/;
+    return msp / (double)/*nRound**/compA.size();
 }
 
 //SNR
