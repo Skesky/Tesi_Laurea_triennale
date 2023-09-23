@@ -6,6 +6,7 @@
 #include <utility>
 #include <string>
 #include <bitset>
+#include <fstream>
 
 #include "costanti.h"
 #include "alice.h"
@@ -13,17 +14,49 @@
 #include "channel.h"
 #include "simulation.h"
 #include "paramEstimation.h"
+#include "reconciliation.h"
 
 
 int main(){
 
     Simulation sim(N_ROUND, "coherent_states");
     ParamEstimation param(N_ROUND);
+    Reconciliation recon;
 
     sim.startSimulation();
 
     param.sifter(sim.getBobMeasures(), sim.getAliceStates());
     param.parameterEstimation();
+
+    //Reconciliation fase
+    bitset<K> randomBits /*= recon.genBitString()*/;
+
+    ifstream parityCheckMatrix("ParityCheckMatrix.txt");
+
+    if(!parityCheckMatrix){
+        cout << "Non e' stato possibile aprire il file" << endl;
+        exit(0);
+    }
+
+    vector < bitset<K> > matrixP;
+    string tmp; 
+
+    do{
+        parityCheckMatrix >> tmp;
+        string line = "";
+        for(int i = 0; i < K; i++)
+            line += tmp[i+M];
+        bitset<K> column{line};
+        matrixP.push_back(column);
+
+    }while(!parityCheckMatrix.eof());
+
+    string codeString = randomBits.to_string() += recon.prdMatrix(randomBits, matrixP);
+
+    //Codeword used to modulate Bob measurement
+    bitset<K> codeWord{recon.prdMatrix(randomBits, matrixP)};
+
+
 
     /*vector<vector<double>> sifted = sifter(sim.getBobMeasures(), sim.getAliceStates());
 

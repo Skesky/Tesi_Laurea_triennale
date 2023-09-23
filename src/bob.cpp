@@ -7,6 +7,7 @@
 
 #include "alice.h"
 #include "bob.h"
+#include "costanti.h"
 
 using namespace std;
 
@@ -41,18 +42,17 @@ pair<double, Component> Bob::measure(State state, default_random_engine gen){
 
 }
 
-bitset<15> Bob::genBitString(default_random_engine gen){
+bitset<K> Bob::genBitString(default_random_engine gen){
     string bitString;
-    const int numBit = 15;
 
-    for(int i = 0; i < numBit; i++){
+    for(int i = 0; i < K; i++){
         if(distribution(gen))
             bitString.append("1");
         else 
             bitString.append("0");
     }
 
-    bitset<numBit> b{bitString};
+    bitset<K> b{bitString};
 
     cout << "Stringa di bit Random :" << b.to_string() << endl;
 
