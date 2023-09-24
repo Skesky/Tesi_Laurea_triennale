@@ -13,7 +13,7 @@ class Bob{
     public:
     Bob();
     pair<double, Component> measure(State state, default_random_engine gen);
-    bitset<15> genBitString(default_random_engine);
+    bitset<K> genBitString(default_random_engine);
 
     private:
     void gaussianSetting(State state);

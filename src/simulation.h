@@ -21,6 +21,7 @@ class Simulation{
     pair<double, Component>* getBobMeasures();
     void freeMem();
     void startSimulation();
+    Bob getBob();
     
 };
  

@@ -59,13 +59,20 @@ string Reconciliation::andBaB(bitset<K> o){
 
 
 //Esegue il prodotto tra un vettore di bit ed una matrice
-string Reconciliation::prdMatrix(bitset<K> s, vector<bitset<K> > pcm){
+string Reconciliation::prdMatrix(bitset<K> s, vector<bitset<K> > pMatrix){
 	string outString;
+
+	if(s.size() != pMatrix[0].size()){
+		cout << "Impossibile effettuare il prodotto matriciale" << endl;
+		cout << "Il numero di colonne della string di bit deve essere pari al numero di righe della matrice" << endl;
+		cout << "Numero di colonne della stringa di bit: " << s.size() << endl;
+		cout << "Numero di righe della matrice P: " << pMatrix[0].size() << endl;
+	}
 	
-		for(int j = 0; j < (int)pcm.size(); j++){
+		for(int j = 0; j < (int)pMatrix.size(); j++){
 			bitset<K> o = s;
-			o &= pcm[j];
-			cout << j << " xor interno " << o.to_string() << endl;
+			o &= pMatrix[j];
+			//cout << j << " xor interno " << o.to_string() << endl;
 			outString.append(andBaB(o)); 
 		}
 	return outString;

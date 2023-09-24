@@ -2,11 +2,11 @@
 #define COSTANTI
  
 
-#define VARIANZA 0.924444
-#define MU 2.0
-#define CHANNEL_LOSS 0.7
-#define NOISE 0.6
-#define N_ROUND 1000
+#define VARIANZA 5.226
+#define MU 1.0
+#define CHANNEL_LOSS 0.1
+#define NOISE 0.005
+#define N_ROUND 10000
 #define N 50
 #define M (N-(int)(N*0.3))
 #define K (N-M)

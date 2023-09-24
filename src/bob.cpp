@@ -54,7 +54,7 @@ bitset<K> Bob::genBitString(default_random_engine gen){
 
     bitset<K> b{bitString};
 
-    cout << "Stringa di bit Random :" << b.to_string() << endl;
+    cout << "Stringa di bit Random stampata da Bob :" << bitString << endl;
 
     return b;
 }

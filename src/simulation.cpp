@@ -47,8 +47,6 @@ void Simulation::startSimulation(){
         
     }
     std::default_random_engine generator(this->rd());
-
-    bob.genBitString(generator);
     
     outputFile.close();
 }
@@ -58,5 +56,6 @@ void Simulation::freeMem(){
     free(bobMeasures);
 }
 
-
-
+Bob Simulation::getBob(){
+    return this->bob;
+}

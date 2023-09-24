@@ -29,11 +29,16 @@ int main(){
     param.parameterEstimation();
 
     //Reconciliation fase
-    bitset<K> randomBits /*= recon.genBitString()*/;
+    Bob bob = sim.getBob();
+    random_device rd;
+    default_random_engine generator(rd());;
+    
+    bitset<K> randomBits = bob.genBitString(generator);
+
 
     ifstream parityCheckMatrix("ParityCheckMatrix.txt");
 
-    if(!parityCheckMatrix){
+    if(!parityCheckMatrix.is_open()){
         cout << "Non e' stato possibile aprire il file" << endl;
         exit(0);
     }
@@ -41,48 +46,39 @@ int main(){
     vector < bitset<K> > matrixP;
     string tmp; 
 
-    do{
+
+    //Reading P matrix from parity check matrix ad traspose it 
+    while(1){
         parityCheckMatrix >> tmp;
+        if(parityCheckMatrix.eof())
+            break;
         string line = "";
-        for(int i = 0; i < K; i++)
+        for(int i = 0; i < K; i++){
             line += tmp[i+M];
+        }
+            
         bitset<K> column{line};
         matrixP.push_back(column);
+    }
 
-    }while(!parityCheckMatrix.eof());
 
     string codeString = randomBits.to_string() += recon.prdMatrix(randomBits, matrixP);
 
     //Codeword used to modulate Bob measurement
-    bitset<K> codeWord{recon.prdMatrix(randomBits, matrixP)};
+    bitset<N> codeWord{codeString};
 
 
-
-    /*vector<vector<double>> sifted = sifter(sim.getBobMeasures(), sim.getAliceStates());
-
-
-    double *parameter = (double*) malloc(3 * sizeof(double));
-    double *noise = (double*) malloc(sizeof(double));
-    double *channelLoss = (double*) malloc(sizeof(double));
-
-
-    parameterEstimation(parameter, noise, channelLoss, sifted);
-
-
-    cout << "Paramentro b: " << parameter[1] << " Valore che ci aspettiamo: " << *channelLoss * VARIANZA + 1.0 + *noise << endl;
-
-    vector<double> ni = niCalc(parameter[0], parameter[1], parameter[2]);
-
-    double chiEveBob = mutInfoEveBob(ni[0], ni[1], ni[2]);
-    double infoAliceBob = mutualInfoAliceBob(*channelLoss, *noise);*/
-
-    cout << "Paramentro b: " << param.getParameter()[1] << " Valore che ci aspettiamo: " << param.getChannelLoss() * VARIANZA + 1.0 + param.getNoise() << endl;
+    cout << "Paramentro b: " << param.getParameter()[1] << " Valore che ci aspettiamo: " << CHANNEL_LOSS * VARIANZA + 1.0 + NOISE << endl;
+    cout << "Paramentro c: " << param.getParameter()[2] << " Valore che ci aspettiamo: " << sqrt(CHANNEL_LOSS * VARIANZA * (VARIANZA + 2)) << endl;
 
     std::cout << "Informazione tra Eve e Bob " << param.getInfoEveBob() << endl; 
     std::cout << "Informazione tra Alice e Bob " << param.getInfoAliceBob() << endl;
     std::cout << "Rapporto segnale rumore " << param.signalNoiseRatio() << endl;
     std::cout << "Perdita stimata del canale " << param.getChannelLoss() << endl;
     std::cout << "Rumore stimato del canale " << param.getNoise() << endl;
+    
+    std::cout << "Stringa codificata: " << codeString << endl;
+    std::cout << "La lunghezza della stringa codificata e': " << codeString.size() << endl;
     
     return 0;
 
