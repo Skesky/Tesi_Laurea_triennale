@@ -31,6 +31,11 @@ pair<double, Component>* Simulation::getBobMeasures(){
 
 void Simulation::startSimulation(){
 
+    if(!outputFile.is_open()){
+        cout << "Fallimento nell'apertura del file";
+        exit(0);
+    }
+
     outputFile << "Q_Mean,P_Mean,Variance;Measured_real;Measured_imag" << endl;
 
     for(int i = 0; i<nRound; i++){
