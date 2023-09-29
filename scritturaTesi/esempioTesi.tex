@@ -1,0 +1,52 @@
+% Classe appositamente creata per tesi di Ingegneria Informatica all'università Roma Tre
+\documentclass{TesiDiaUniroma3}
+
+% --- INIZIO dati relativi al template TesiDiaUniroma3
+% dati obbligatori, necessari al frontespizio
+\titolo{Simulazione GM-CVQKD}
+\autore{Kevin Santodonato}
+\matricola{548019}
+\relatore{Prof. Matteo Rosati}
+\correlatore{Prof. Nome Cognome} % modifica anche TesiDiaUniroma3.cls se vuoi avere un correlatore
+\annoAccademico{2022/2023}
+
+% dati opzionali
+\dedica{Questa \`e la dedica} % solo se nel documento si usa il comando \generaDedica
+% --- FINE dati relativi al template TesiDiaUniroma3
+
+% --- INIZIO richiamo di pacchetti di utilità. Questi sono un esempio e non sono strettamente necessari al modello per la tesi.
+\usepackage[plainpages=false]{hyperref}	% generazione di collegamenti ipertestuali su indice e riferimenti
+
+\usepackage[all]{hypcap} % per far si che i link ipertestuali alle immagini puntino all'inizio delle stesse e non alla didascalia sottostante
+\usepackage{amsthm}	% per definizioni e teoremi
+\usepackage{amsmath}	% per ``cases'' environment
+% --- FINE riachiamo di pacchetti di utilità
+
+\begin{document}
+% ----- Pagine di fronespizio, numerate in romano (i,ii,iii,iv...) (obbligatorio)
+\frontmatter
+\generaFrontespizio
+\generaDedica
+\ringraziamenti{ringraziamenti}	% inserisce i ringraziamenti e li prende in questo caso da ringraziamenti.tex
+\introduzione{introduzione}		% inserisce l'introduzione e la prende in questo caso da introduzione.tex
+\generaIndice
+\generaIndiceFigure
+
+% ----- Pagine di tesi, numerate in arabo (1,2,3,4,...) (obbligatorio)
+\mainmatter
+% il comando ``capitolo'' ha come parametri:
+% 1) il titolo del capitolo
+% 2) il nome del file tex (senza estensione) che contiene il capitolo. Tale nome \`e usato anche come label del capitolo
+\capitolo{Descrizione quantistica di un segnale}{capitolo_1}
+\capitolo{Quantum Key Distribution}{capitolo_2}
+\capitolo{Simulazione}{capitolo_3}
+
+% ----- Parte finale della tesi (obbligatorio)
+\backmatter
+\conclusioni{conclusioni}
+
+% Bibliografia con BibTeX (obbligatoria)
+% Non si deve specificare lo stile della bibliografia
+\bibliography{bibliografia} % inserisce la bibliografia e la prende in questo caso da bibliografia.bib
+
+\end{document}
