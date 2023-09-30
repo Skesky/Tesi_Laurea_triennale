@@ -1,4 +1,4 @@
-# aggiorna questo nome con il nome del file .tex che contiene la tua tesi
+ # aggiorna questo nome con il nome del file .tex che contiene la tua tesi
 finalname = esempioTesi
 
 # lista qui di seguito tutti i file aggiuntivi .tex (se ci sono) che compongono 
@@ -16,7 +16,8 @@ included_latex_sources = \
 psfiles = \
 	figure/uniroma3-logo.eps \
 	figure/esempio-figura-1.eps \
-	figure/esempio-figura-2.eps 
+	figure/esempio-figura-2.eps \
+	figure/stato_coerente.eps
 
 $(finalname): $(included_latex_sources) $(psfiles) $(finalname).tex
 	latex $(finalname).tex

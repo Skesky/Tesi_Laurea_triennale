@@ -46,13 +46,17 @@ void ParamEstimation::sifter(pair<double, Component>* bob, State* alice){
     for(int i = 0; i < nRound; i++){
         if(bob[i].second == q){
             this->bobQs.push_back(bob[i].first);
-
             this->aliceQs.push_back(alice[i].q.value);
+
+            this->aliceData.push_back(bob[i].first);
+            this->bobData.push_back(alice[i].q.value);
 
         } else{
             this->bobPs.push_back(bob[i].first);
+            this->alicePs.push_back(alice[i].p.value);
 
-            this->alicePs.push_back(alice[i].p.value); 
+            this->aliceData.push_back(bob[i].first);
+            this->bobData.push_back(alice[i].p.value);
 
         }
     }
@@ -180,4 +184,12 @@ vector<double> ParamEstimation::getBobPComponents(){
 
     return this->bobPs;
 
+}
+
+vector<double> ParamEstimation::getAliceData(){
+    return this->aliceData;
+}
+
+vector<double> ParamEstimation::getBobData(){
+    return this->bobData;
 }

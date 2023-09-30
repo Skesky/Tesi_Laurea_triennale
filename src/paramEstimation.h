@@ -17,11 +17,17 @@ class ParamEstimation{
     vector<double> bobQs;
     vector<double> bobPs;
 
+    //questi dati sono ridondanti ma mantengono l'ordine di trasmissione
+    vector<double> aliceData;
+    vector<double> bobData;
+
+
     double mutInfoAB;
     double mutInfoEB;
 
 
     public:
+    
     ParamEstimation(int);
     double getChannelLoss();
     double getNoise();
@@ -34,6 +40,8 @@ class ParamEstimation{
     vector<double> getAlicePComponents();
     vector<double> getBobQComponents();
     vector<double> getBobPComponents();
+    vector<double> getAliceData();
+    vector<double> getBobData();
     void parameterEstimation();
     void sifter(pair<double, Component>*, State*);
 

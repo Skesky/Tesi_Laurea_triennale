@@ -21,7 +21,7 @@ int main(){
 
     Simulation sim(N_ROUND, "coherent_states");
     ParamEstimation param(N_ROUND);
-    Reconciliation recon;
+    
 
     sim.startSimulation();
 
@@ -29,6 +29,7 @@ int main(){
     param.parameterEstimation();
 
     //Reconciliation fase
+    Reconciliation recon(param.getAliceData(), param.getBobData(), param.getParameter()[1]);
     Bob bob = sim.getBob();
     random_device rd;
     default_random_engine generator(rd());;
@@ -62,10 +63,17 @@ int main(){
     }
 
 
-    string codeString = randomBits.to_string() += recon.prdMatrix(randomBits, matrixP);
+
+    string codeString = randomBits.to_string().append(recon.prdMatrix(randomBits, matrixP));
 
     //Codeword used to modulate Bob measurement
     bitset<N> codeWord{codeString};
+
+
+    //Sign modulation of bob's normalized data
+    vector<double> modulated = recon.signModulation(codeWord);
+    recon.dMessage(modulated);
+
 
 
     cout << "Paramentro b: " << param.getParameter()[1] << " Valore che ci aspettiamo: " << CHANNEL_LOSS * VARIANZA + 1.0 + NOISE << endl;

@@ -3,14 +3,16 @@
 #include <bitset>
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 #include "costanti.h"
 #include "reconciliation.h"
 
 using namespace std;
 
-Reconciliation::Reconciliation(){
-
+Reconciliation::Reconciliation(vector<double> aliceData, vector<double> bobData, double paramB){
+	normalizeAlice(aliceData);
+	normalizeBob(bobData, paramB);
 }
 
 /*bitset<K> Reconciliation::genBitString(default_random_engine gen){
@@ -79,33 +81,59 @@ string Reconciliation::prdMatrix(bitset<K> s, vector<bitset<K> > pMatrix){
 }
 
 //Esegue una modulazione di segno dei valori misurati da Bob
-vector<double> Reconciliation::signModulation(vector<double> bobMeasure, bitset<K> codeWord){
-
+vector<double> Reconciliation::signModulation(bitset<N> codeWord){
 	vector<double> modulated;
+	int count = 0;
 
-	for (size_t i = 0; i < codeWord.size(); i++){
-
-		if (codeWord[1])
-			modulated.push_back(-bobMeasure[i]);
+	for (int i = codeWord.size(); i >= 0; i--){
+		if(codeWord[i]){
+			cout << "Sono nell'if all'indice: " << i << endl;
+			modulated.push_back(-(this->normalizedBobData[count]));
+		}
 		else
-			modulated.push_back(bobMeasure[i]);
+			modulated.push_back(this->normalizedBobData[count]);
 
-	
+		count++;
 	}
 
 	return modulated;
 }
 
+void Reconciliation::computeLlr(){
 
-vector<double> Reconciliation::demodulation(vector<double> modulated, vector<double> aliceStates){
-
-	vector<double> demodulated;
-
-	for(size_t i = 0; i < modulated.size(); i++){
-		demodulated.push_back(modulated[i] / aliceStates[i]);
-	} 
-
-	return demodulated;
+	for(int i = 0; i < dummyMessage.size(); i++)
+		this->llr.push_back((2.0 * this->dummyMessage[i])/(1/VARIANZA)/abs(this->normalizedAliceData[i]));
 }
 
 
+void Reconciliation::dMessage(vector<double> modulated){
+
+	for(int i = 0; i < (int)modulated.size(); i++){
+		this->dummyMessage.push_back(modulated[i] / this->normalizedAliceData[i]);
+	} 
+
+}
+
+void Reconciliation::normalizeAlice(vector<double> aliceData){
+
+	for(int i = 0; i < (int)aliceData.size(); i++){
+		this->normalizedAliceData.push_back(aliceData[i]/sqrt(VARIANZA));
+	}
+	
+}
+
+void Reconciliation::normalizeBob(vector<double> bobData, double paramB){
+
+	for(int i = 0; i < (int)bobData.size(); i++){
+		this->normalizedBobData.push_back(bobData[i]/sqrt(paramB));
+	}
+	
+}
+
+vector<double> Reconciliation::getNormalizedAliceData(){
+	return this->normalizedAliceData;
+}
+
+vector<double> Reconciliation::getLlr(){
+	return this->llr;
+}

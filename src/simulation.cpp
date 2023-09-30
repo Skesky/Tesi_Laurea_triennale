@@ -45,7 +45,7 @@ void Simulation::startSimulation(){
         
         bobMeasures[i] = bob.measure(channel.trasmission(aliceStates[i]), generator);
 
-        outputFile << aliceStates[i].q.value << ',' << aliceStates[i].p.value << ',' << aliceStates[i].p.value << ";" 
+        outputFile << aliceStates[i].q.value << ';' << aliceStates[i].p.value << ';' << aliceStates[i].p.value << ";" 
                    << bobMeasures[i].first << ";" << bobMeasures[i].second << endl;
 
         //cout << i << "--"<< bobMeasures[i].first << "," << bobMeasures[i].second << endl;
