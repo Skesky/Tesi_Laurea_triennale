@@ -14,7 +14,7 @@ using namespace std;
 
 Simulation::Simulation(int round, string fileName){
     this->nRound = round;
-    this->outputFile.open(fileName + ".csv", ios::out | ios::in); 
+    this->outputFile.open(fileName + ".csv"); 
     this->aliceStates = (State*) malloc(N_ROUND * sizeof(State));
     this->bobMeasures = (pair<double, Component>*) malloc(N_ROUND * sizeof(pair<double, Component>));
 }

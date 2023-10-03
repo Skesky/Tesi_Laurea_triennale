@@ -15,6 +15,9 @@
 #include "simulation.h"
 #include "paramEstimation.h"
 #include "reconciliation.h"
+#include "decoder.h"
+
+
 
 
 int main(){
@@ -30,11 +33,11 @@ int main(){
 
     //Reconciliation fase
     Reconciliation recon(param.getAliceData(), param.getBobData(), param.getParameter()[1]);
-    Bob bob = sim.getBob();
+    Decoder dec;
     random_device rd;
     default_random_engine generator(rd());;
     
-    bitset<K> randomBits = bob.genBitString(generator);
+    bitset<K> randomBits = sim.getBob().genBitString(generator);
 
 
     ifstream parityCheckMatrix("ParityCheckMatrix.txt");
@@ -45,14 +48,13 @@ int main(){
     }
 
     vector < bitset<K> > matrixP;
-    string tmp; 
-
+     
 
     //Reading P matrix from parity check matrix ad traspose it 
-    while(1){
+    for(int i = 0; i < M; i++){
+        string tmp;
         parityCheckMatrix >> tmp;
-        if(parityCheckMatrix.eof())
-            break;
+        dec.checkVariableNodesCount(tmp, i);
         string line = "";
         for(int i = 0; i < K; i++){
             line += tmp[i+M];
@@ -61,7 +63,6 @@ int main(){
         bitset<K> column{line};
         matrixP.push_back(column);
     }
-
 
 
     string codeString = randomBits.to_string().append(recon.prdMatrix(randomBits, matrixP));
@@ -73,6 +74,10 @@ int main(){
     //Sign modulation of bob's normalized data
     vector<double> modulated = recon.signModulation(codeWord);
     recon.dMessage(modulated);
+    vector<double> llr = recon.getLlr();
+
+    dec.initLlr(recon.getLlr());
+    vector<double> Q = dec.decode();
 
 
 
@@ -87,6 +92,17 @@ int main(){
     
     std::cout << "Stringa codificata: " << codeString << endl;
     std::cout << "La lunghezza della stringa codificata e': " << codeString.size() << endl;
+
+    cout << "Updated LLR: " << endl;
+    for(int i = 0; i < dec.getQ().size(); i++){
+        cout << dec.getQ()[i] << " ";
+    }
+    cout << endl;
+    cout << endl;
+    cout << "Initial LLR: " << endl;
+    for(int i = 0; i < recon.getLlr().size(); i++){
+        cout << recon.getLlr()[i] << " ";
+    }
     
     return 0;
 

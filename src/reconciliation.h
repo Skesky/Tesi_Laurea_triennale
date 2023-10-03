@@ -8,7 +8,6 @@ class Reconciliation{
     private:
     vector<double> normalizedAliceData;
     vector<double> normalizedBobData;
-    //vector<double> awgnVariances;
     vector<double> dummyMessage;
     vector<double> llr;
 

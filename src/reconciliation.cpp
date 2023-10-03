@@ -85,9 +85,9 @@ vector<double> Reconciliation::signModulation(bitset<N> codeWord){
 	vector<double> modulated;
 	int count = 0;
 
-	for (int i = codeWord.size(); i >= 0; i--){
+	for (int i = codeWord.size()-1; i >= 0; i--){
 		if(codeWord[i]){
-			cout << "Sono nell'if all'indice: " << i << endl;
+			//cout << "Sono nell'if all'indice: " << i << endl;
 			modulated.push_back(-(this->normalizedBobData[count]));
 		}
 		else
@@ -102,7 +102,7 @@ vector<double> Reconciliation::signModulation(bitset<N> codeWord){
 void Reconciliation::computeLlr(){
 
 	for(int i = 0; i < dummyMessage.size(); i++)
-		this->llr.push_back((2.0 * this->dummyMessage[i])/(1/VARIANZA)/abs(this->normalizedAliceData[i]));
+		this->llr.push_back((2.0 * this->dummyMessage[i])/((1/VARIANZA)/abs(this->normalizedAliceData[i])));
 }
 
 
@@ -110,7 +110,9 @@ void Reconciliation::dMessage(vector<double> modulated){
 
 	for(int i = 0; i < (int)modulated.size(); i++){
 		this->dummyMessage.push_back(modulated[i] / this->normalizedAliceData[i]);
-	} 
+	}
+
+	computeLlr();
 
 }
 

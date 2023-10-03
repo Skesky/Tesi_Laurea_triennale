@@ -10,7 +10,7 @@ class Simulation{
     Bob bob;
     Channel channel;
     int nRound;
-    fstream outputFile;
+    ofstream outputFile;
     random_device rd;
     State* aliceStates;
     pair<double, Component> *bobMeasures;
