@@ -96,9 +96,15 @@ double Decoder::argTanh(int i , vector<int> c , int row){
 
     for(int w = 0; w < c.size(); w++){
         if(w != i && c[w] != -1){
-            arg *= tanh(0.5 * qMatrix[c[w]][row]);
+            arg *= tanh(0.5 * qMatrix[w][row]);
         }
     }
+    
+    if(arg <= (-0.99))
+        return -0.99;
+    else if(arg >= 0.99)
+        return 0.99;
+        
     return arg;
 }
 

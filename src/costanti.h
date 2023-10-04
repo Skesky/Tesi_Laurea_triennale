@@ -6,11 +6,11 @@
 #define MU 1.0
 #define CHANNEL_LOSS 0.1
 #define NOISE 0.005
-#define N_ROUND 1000000
+#define N_ROUND 1000
 #define N 50
 #define M (N-(int)(N*0.3))
 #define K (N-M)
-#define DEC_ROUND 100
+#define DEC_ROUND 300
 
 enum Component {q, p};
 

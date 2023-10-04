@@ -104,6 +104,38 @@ int main(){
         cout << recon.getLlr()[i] << " ";
     }
     
+    cout << endl << "L(Q): " << endl;
+    
+    string llrUp;
+    for(int i = 0; i < dec.getQ().size(); i++){
+        if(dec.getQ()[i] >= 0){
+            cout << 0;
+            llrUp += "0";
+        }
+        else{
+            cout << 1;
+            llrUp += "1";
+        }
+    } 
+    
+    bitset<N> llrU {llrUp};
+    
+    cout << endl;
+    std::cout << codeString << endl;
+    
+    bitset<N> pippo = codeWord ^ llrU;
+    
+    cout << "XOR:" << endl;
+    cout << pippo.to_string() << endl;
+    
+    int num1;
+    for(int i = 0; i < pippo.size(); i++){
+        if(pippo[i])
+            num1++;
+    }
+    
+    cout << num1 << endl;
+     
     return 0;
 
 }
