@@ -1,3 +1,19 @@
-\begin{thebibliography}{}
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{MFZG18}
+
+\bibitem[LPF{\etalchar{+}}18]{https://doi.org/10.1002/qute.201800011}
+Fabian Laudenbach, Christoph Pacher, Chi-Hang~Fred Fung, Andreas Poppe,
+  Momtchil Peev, Bernhard Schrenk, Michael Hentschel, Philip Walther, and
+  Hannes Hübel.
+\newblock Continuous-variable quantum key distribution with gaussian
+  modulation—the theory of practical implementations.
+\newblock {\em Advanced Quantum Technologies}, 1(1):1800011, 2018.
+
+\bibitem[MFZG18]{milicevic_key_2018}
+Mario Milicevic, Chen Feng, Lei~M. Zhang, and P.~Glenn Gulak.
+\newblock Key {Reconciliation} with {Low}-{Density} {Parity}-{Check} {Codes}
+  for {Long}-{Distance} {Quantum} {Cryptography}.
+\newblock {\em npj Quantum Inf}, 4(1):21, April 2018.
+\newblock arXiv:1702.07740 [quant-ph].
 
 \end{thebibliography}

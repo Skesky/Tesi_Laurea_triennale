@@ -37,7 +37,7 @@ void Simulation::startSimulation(){
     }
 
     outputFile << "Q_Mean,P_Mean,Variance;Measured_real;Measured_imag" << endl;
-
+    double prova;
     for(int i = 0; i<nRound; i++){
         std::default_random_engine generator(this->rd());
 
@@ -48,10 +48,13 @@ void Simulation::startSimulation(){
         outputFile << aliceStates[i].q.value << ';' << aliceStates[i].p.value << ';' << aliceStates[i].p.value << ";" 
                    << bobMeasures[i].first << ";" << bobMeasures[i].second << endl;
 
+        prova += aliceStates[i].q.value * aliceStates[i].q.value;
+        
         //cout << i << "--"<< bobMeasures[i].first << "," << bobMeasures[i].second << endl;
         
     }
-    std::default_random_engine generator(this->rd());
+    cout << "Varianza q calcolata in simulazione: " << prova/(double)N_ROUND << endl;
+    //std::default_random_engine generator(this->rd());
     
     outputFile.close();
 }
