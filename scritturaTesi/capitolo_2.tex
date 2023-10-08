@@ -89,8 +89,26 @@ Questo protocollo \`e particolarmente sicuro perch\'e consentente il rilevamento
 Gli attacchi presi in considerazione tipicamente sono tre e differiscono per la loro efficacia:
 \begin{itemize}
 \item \textbf{attacchi individuali}: Eve effettua operazioni singolarmente su ogni segnale che viene scambiato tra Alice e Bob. 
-\item \textbf{attacchi collettivi}: Eve salva nella memoria del suo computer quantistico un certo numero di stati sui quali effettua una misura collettiva. Questo attacco \`e pi\`u potente del precedente perch\`e secondo i pricipi della fisica quantistica effettuando una misura collettiva si pu\`o potenzialmente ricavare pi\`u informazione che dalla misura del singolo stato. 
+\begin{figure}[tbp] 
+\begin{center}
+\includegraphics[width=0.8\textwidth]{figure/individual_attack.eps} 
+\end{center}
+\caption{Schema di comunicazione tra Alice e Bob Sezione~\ref{se:prima-sezione}.} \label{fig:figura-doppia}
+\end{figure}
+\item \textbf{attacchi collettivi}: Eve salva nella memoria del suo computer quantistico un certo numero di stati sui quali effettua una misura collettiva. Questo attacco \`e pi\`u potente del precedente perch\`e secondo i pricipi della fisica quantistica effettuando una misura collettiva si pu\`o potenzialmente ricavare pi\`u informazione che dalla misura del singolo stato.
+\begin{figure}[tbp] 
+\begin{center}
+\includegraphics[width=0.8\textwidth]{figure/collective_attack.eps} 
+\end{center}
+\caption{Schema di comunicazione tra Alice e Bob Sezione~\ref{se:prima-sezione}.} \label{fig:figura-doppia}
+\end{figure}
 \item \textbf{attacchi coerenti}: sono attacchi pi\`u potenti dei collettivi perché Eve, oltre alla lettura collettiva, può utilizzare delle correlazioni quantistiche, cioé entanglement, per mettere in relazione gli stati di pi\`u run.
+\begin{figure}[tbp] 
+\begin{center}
+\includegraphics[width=0.8\textwidth]{figure/collective_attack.eps} 
+\end{center}
+\caption{Schema di comunicazione tra Alice e Bob Sezione~\ref{se:prima-sezione}.} \label{fig:figura-doppia}
+\end{figure}
 \end{itemize} 
 
 Tornando al motivo per cui effettivamente si riesce a rilevare Eve possiamo, anche questa volta, dare il merito ai principi della fisica quantistica. Questo perch\`e in caso di misura da parte di Eve lo stato coerente trasmesso verr\`a alterato. Due esempio di attacchi che Eve pu\`o mettere in atto e le loro conseguenze sono: 
@@ -103,7 +121,6 @@ In entrambi i casi, un attacco da parte di Eve non va a far altro che aumentare 
 
 Tutte queste alterazione, in fase di stima dei parametri, produrranno dei valori indesiderati come $\chi > I_{AB}$. Queste incongruenza tra le stime e ci\`o che ci si aspettava dalla scelta dei paramettri iniziali portano a pensare che una spia si sia intromessa nella comunicazione. 
 
-
 \begin{figure}[h] 
 \begin{center}
 \includegraphics[width=\textwidth]{figure/alice_bob_communication.eps} 
@@ -111,4 +128,3 @@ Tutte queste alterazione, in fase di stima dei parametri, produrranno dei valori
 \caption{Schema di comunicazione tra Alice e Bob Sezione~\ref{se:prima-sezione}.} \label{fig:figura-doppia}
 \end{figure}
 
-Come si evince dalle Figure~\ref{fig:figura-doppia}.a e~\ref{fig:figura-doppia}.b non si capisce molto.

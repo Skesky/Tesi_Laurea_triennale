@@ -20,6 +20,11 @@
 \usepackage[all]{hypcap} % per far si che i link ipertestuali alle immagini puntino all'inizio delle stesse e non alla didascalia sottostante
 \usepackage{amsthm}	% per definizioni e teoremi
 \usepackage{amsmath}	% per ``cases'' environment
+
+
+\usepackage{algorithm}		%pacchetti utilizzati per la scrittura di pseudo-codice
+\usepackage{algorithmic}
+
 % --- FINE riachiamo di pacchetti di utilità
 
 \begin{document}
@@ -28,9 +33,10 @@
 \generaFrontespizio
 \generaDedica
 \ringraziamenti{ringraziamenti}	% inserisce i ringraziamenti e li prende in questo caso da ringraziamenti.tex
-\introduzione{introduzione}		% inserisce l'introduzione e la prende in questo caso da introduzione.tex
+
 \generaIndice
 \generaIndiceFigure
+\introduzione{introduzione}% inserisce l'introduzione e la prende in questo caso da introduzione.tex
 
 % ----- Pagine di tesi, numerate in arabo (1,2,3,4,...) (obbligatorio)
 \mainmatter

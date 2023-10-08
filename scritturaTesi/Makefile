@@ -17,7 +17,10 @@ psfiles = \
 	figure/uniroma3-logo.eps \
 	figure/esempio-figura-1.eps \
 	figure/esempio-figura-2.eps \
-	figure/stato_coerente.eps
+	figure/stato_coerente.eps \
+	figure/alice_bob_communication.eps \
+	figure/individual_attack.eps \
+	figure/collective_attack.eps
 
 $(finalname): $(included_latex_sources) $(psfiles) $(finalname).tex
 	latex $(finalname).tex

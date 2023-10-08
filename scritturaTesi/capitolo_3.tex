@@ -1,2 +1,57 @@
+La realizzazione di questo simulatore per la distribuzione quantistica di chiavi con modulazione gaussiana di prefigge lo scopo di realizzare una chiave crittografica sicura, la quale successivamente potr\`a essere utilizzate per la codifica e decodifica di un messaggio trasmesso su un canale classico. 
+
+Come tecnologie \`e stato utilizzato il linguaggio di programmazione C++. I motivi principali di questa scelta sono tre: la velocit\`a del linguaggio di programmazione, la disponidilit\`a di librerie che implementano le distribuzioni di probabilit\`a necessarie alla simulazione e la presenza di librerie esterne che implementano due algoritmi indispensabili per la correzzione degli errori.
+
+Anche se il progetto \`e stato realizzato utilizzando C++ \`e stato deciso di illustrare quanto \`e stato fatto attraverso dello psdeudo-codice in modo tale da non legare la simulazione ad una specifico linguaggio di programmazione ed aggevolarne la rimplementazione in qualunque linguaggio di programmazione si voglia utilizzare, di fatto verr\`a utilizzato della pseudo-codice anche per descrivere il due algoritmi per la correzzione degli errori.
+
+\section{Preparazione, trasmissione e misura}
+
+\subsection{Preparazione dello stato coerente}
+Vengono scelti due valori che rappresentano i valori medi delle gaussiane che realizzano lo stato coerente. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratati in zero e con varianza $V_{mod}$ che un questo specifica simulazione ha valore $5.226$. Questo valore di varianza \`e stato scelto, insieme al valore della trasmittanza e quello del rumore, per raggiungere un rapporto segnale rumore pari a $SNR=0.52$. 
+\subsection{Trasmissione su canale rumoroso}
+Per ogni stato coerente estratto si simula la trasmissione in un canale rumoroso. In particolare i valori di rumore e trasmittanza scelti sono rispettivamente $\xi = 0.005$ e $T = 0.1$, scelti sempre per garantire un $SNR = 0.52$
+\subsection{Misura omodina del segnale}
+
+\section{Stima dei parametri}
+
+\subsection{Sifting}
+\subsection{Stima delle varianze dei dati trasmessi, ricevuti e delle loro covarianza}
+\subsection{Stima mutue informazioni}
+\subsection{Accertamento sicurezza trasmissione}
+
+\section{Riconciliazione}
+
+\subsection{Generazione stringa random di bit}
+
+\subsection{Algoritmo Progessive Edge Growth}
+
+
+\begin{algorithm}
+\caption{: Classic PEG algorithm}
+\begin{algorithmic}
+\STATE pippo 
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+\caption{: Sum-product decoding algorithm}
+\begin{algorithmic}
+\STATE pippo
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Messaggio fittizio}
+
+\subsection{Algoritmo Sum-Product}
+
+\begin{algorithm}
+\caption{: Sum-product decoding algorithm}
+\begin{algorithmic}
+\STATE pippo
+\end{algorithmic}
+\end{algorithm}
+
+
 
 
