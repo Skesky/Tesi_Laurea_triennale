@@ -11,6 +11,12 @@ W.~Diffie and M.~Hellman.
 \newblock New directions in cryptography.
 \newblock {\em IEEE Transactions on Information Theory}, 22(6):644--654, 1976.
 
+\bibitem[FNZG22]{e24101463}
+Xiaodong Fan, Quanhao Niu, Tao Zhao, and Banghong Guo.
+\newblock Rate-compatible ldpc codes for continuous-variable quantum key
+  distribution in wide range of snrs regime.
+\newblock {\em Entropy}, 24(10), 2022.
+
 \bibitem[LPF{\etalchar{+}}18]{https://doi.org/10.1002/qute.201800011}
 Fabian Laudenbach, Christoph Pacher, Chi-Hang~Fred Fung, Andreas Poppe,
   Momtchil Peev, Bernhard Schrenk, Michael Hentschel, Philip Walther, and

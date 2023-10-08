@@ -4,17 +4,20 @@ Come tecnologie \`e stato utilizzato il linguaggio di programmazione C++. I moti
 
 Anche se il progetto \`e stato realizzato utilizzando C++ \`e stato deciso di illustrare quanto \`e stato fatto attraverso dello psdeudo-codice in modo tale da non legare la simulazione ad una specifico linguaggio di programmazione ed aggevolarne la rimplementazione in qualunque linguaggio di programmazione si voglia utilizzare, di fatto verr\`a utilizzato della pseudo-codice anche per descrivere il due algoritmi per la correzzione degli errori.
 
+Prima di addentranci nella descrizione delle fasi della simulazione, \`e bene andare a definire delle costanti necessarie per il corretto funzionamente del simulatore. Le costanti in questione sono il rumore e la trasmittanza del canale, rispettivamente $\xi = 0.005$ e $T=0.1$, la varianza $V_{mod}=5.226$ della modulazione e l'accuratezza della riconciliazione $\beta = 0.993$. I valori per queste costanti sono stati scelti in base ai risultati ottenuti negli articoli~\cite{https://doi.org/10.1002/qute.201800011} e \cite{e24101463}.
+
 \section{Preparazione, trasmissione e misura}
 
 \subsection{Preparazione dello stato coerente}
-Vengono scelti due valori che rappresentano i valori medi delle gaussiane che realizzano lo stato coerente. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratati in zero e con varianza $V_{mod}$ che un questo specifica simulazione ha valore $5.226$. Questo valore di varianza \`e stato scelto, insieme al valore della trasmittanza e quello del rumore, per raggiungere un rapporto segnale rumore pari a $SNR=0.52$. 
+Per la realizzazione degli stati coerenti da trasmettere sul canale vengono scelti due valori che rappresentano i valori medi delle due gaussiane con varianza unitaria che caratterizzano lo stato. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratata in zero e con varianza $V_{mod}$. Queste informazioni sono salvare in una struttura dati che oltre a contenere tutte le informazioni necessaria per caratterizzare lo stato coerente persenta dei tag che verranno utilizzati nella sottosezione~\ref{se:sifting} per distinguere la componenti di quadratura $p$ e $q$.
+
 \subsection{Trasmissione su canale rumoroso}
-Per ogni stato coerente estratto si simula la trasmissione in un canale rumoroso. In particolare i valori di rumore e trasmittanza scelti sono rispettivamente $\xi = 0.005$ e $T = 0.1$, scelti sempre per garantire un $SNR = 0.52$
+Per ogni stato coerente prodotto si simula la trasmissione in un canale rumoroso. Le operazioni che vengono effettuare in pratica sono: il prodotto dei valori medi della gaussiane per la radice quadrata della trasmittanza e la somma di $\xi$ alla varianza.
 \subsection{Misura omodina del segnale}
 
 \section{Stima dei parametri}
 
-\subsection{Sifting}
+\subsection{Sifting}\label{subse:sifting}
 \subsection{Stima delle varianze dei dati trasmessi, ricevuti e delle loro covarianza}
 \subsection{Stima mutue informazioni}
 \subsection{Accertamento sicurezza trasmissione}
