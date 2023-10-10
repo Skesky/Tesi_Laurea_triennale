@@ -58,6 +58,7 @@ clean:
 	rm -f *.idx
 	rm -f *.ilg
 	rm -f *.ind
+	rm -f *.gz
 
 
 index: 
@@ -78,3 +79,4 @@ ps: $(finalname)
 pdf: $(finalname)
 	dvips -Ppdf $(finalname).dvi -o $(finalname).ps
 	ps2pdf $(finalname).ps $(finalname).pdf
+	

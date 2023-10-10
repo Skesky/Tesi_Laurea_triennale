@@ -1,13 +1,13 @@
-La QKD (Quantum Key distribution), o Distribuzione Quantistica delle Chiavi, \`e una tecnologia di crittografia quantistica che permette la distribuzione di chiavi crittografiche con un livello di sicurezza inattacabile anche da computer quantistici. La QKD pu\`o essere suddivisa in due macro-classi DV-QKD e CV-QKD. Nella DV-QKD (Descrete Variable Quantum Key Distribution) le informazioni vengono trasmesse utilizzando stati quantici discreti, ad esempio la polarizzazione degli fotoni, che viene misurata attravarso apposite apparecchiature per ogni fotone; al contrario nella CV-QKD (Continous Variable Quantum Key Distribution) vengono misurate variabili continue delle onde elettromagnatiche come ad esempio la fase.
+La QKD (Quantum Key distribution), o Distribuzione Quantistica delle Chiavi, \`e una tecnologia di crittografia quantistica che permette la distribuzione di chiavi crittografiche con un livello di sicurezza inattacabile anche da computer quantistici. La QKD pu\`o essere suddivisa in due macro-classi DV-QKD e CV-QKD. Nella DV-QKD (Discrete-Variable Quantum Key Distribution) le informazioni vengono trasmesse utilizzando stati quantici discreti, ad esempio la polarizzazione degli fotoni, che viene misurata attravarso apposite apparecchiature per ogni fotone; al contrario nella CV-QKD (Continous-Variable Quantum Key Distribution) vengono utilizzate variabili continue delle onde elettromagnatiche come ad esempio la fase.
 
 La sicurezza \'e garantita dai principi delle fisica quantistica che ci permettono di rilevare eventuali intercettazioni da parte di Eve (spia) nella trasmissione su canale quantistico tra Alice (mittente) e Bob (destinatario).
 
-La rilevazione \`e dovuta al fatto che durante la misura da parte di Eve lo stato quantistico viene alterato facendo diminuire l'energia del segnale e introducendo del rumore, quindi dell'incertezza. All'atto pratico Eve intercetta lo stato coerente, rappresentato come in figura~\ref{fig:stato-coerente}, ne effettua una misura per poi ritrasmetterlo sul canale. Bob ricever\`a uno stato coerente con del rumore aggiunto e un minor numero di fotoni, ci\`o comporta che la gaussiana che lo rappresenta sar\`a caratterizzata da una varianza superiore a quella stimata e un valor medio pi\`u vicino allo zero. Per questo motivo, si effettuano numerosi run di trasmissione quantistica. In una fase preliminare si utilizza un certo numero di run per stimare i parametri di rumore del canale e, da essi, decidere se la trasmissione sta avvenendo in modo sicuro oppure no (si veda Sez.~\ref{subse:stima-parametri}). Nel caso in cui il controllo non vada a buon fine, la trasmissione  corrente viene abbortita perch\'e non \`e possibile garantire la sicurezza della chiave crittografica.
+La rilevazione \`e dovuta al fatto che durante la misura da parte di Eve lo stato quantistico viene alterato facendo diminuire l'energia del segnale se questo non viene amplificato\footnote{Un amplificazione, pur riportando il livello di energia del segnale a quello iniziale, introdurr\`a ulteriore rumore.} e introducendo del rumore, quindi dell'incertezza. All'atto pratico Eve intercetta lo stato coerente, rappresentato come in figura~\ref{fig:stato-coerente}, ne effettua una misura per poi ritrasmetterlo sul canale. Bob ricever\`a uno stato coerente con del rumore aggiunto e un minor numero di fotoni, ci\`o comporta che la gaussiana che lo rappresenta sar\`a caratterizzata da una varianza superiore a quella stimata e un valor medio pi\`u vicino allo zero. Per questo motivo, si effettuano numerosi run di trasmissione quantistica. In una fase preliminare si utilizza un certo numero di run per stimare i parametri di rumore del canale e, da essi, decidere se la trasmissione sta avvenendo in modo sicuro oppure no (si veda Sez.~\ref{subse:stima-parametri}). Nel caso in cui il controllo non vada a buon fine, la trasmissione corrente viene abortita perch\'e non \`e possibile garantire la sicurezza della chiave crittografica e si comincia con un nuovo round.
 
 \section{CV-QKD con modulazione gaussiana}
 Il protocollo di distribuzione quantistica di chiavi a variabili continue con modulazione gaussiana \`e un protocollo molto indicato per lo sviluppo e l'utilizzo su larga scala nel mondo reale data la sua affinit\`a con le infrastrutture oggi gi\`a esistenti, come ad esempio, i canali di comunicazione in fibra ottica. Come enunciato all'inizio del capitolo con questo protocollo si effettuano misure su variabili continue delle onde elettromagnetiche e in particolare nei protocolli con modulazione gaussiana gli stati coerenti da trasmettere sul canale di comunicazione vengono estratti da una distribuzione normale centrata in zero e una certa deviazione standard che viene definita in base ad alcuni fattori.
 
-Il protocollo pu\`o essere suddiviso un due sezioni: la prima parte ha effettivamente a che fare con segnali quantistici mentre la seconda parte opera con segnali e dati classici. La prima sezione comprende la scelta e la trasmissione degli stati coerenti su fibra ottica da parte di Alice e termina nel momento in cui Bob effettua la misura; la seconda parte comprende il sifting, la stima dei parametri e la riconciliazione.
+Il protocollo pu\`o essere suddiviso in due sezioni: la prima sezione ha effettivamente a che fare con segnali quantistici mentre la seconda sezione opera con segnali e dati classici. La prima sezione comprende la scelta e la trasmissione degli stati coerenti su fibra ottica da parte di Alice e termina nel momento in cui Bob effettua la misura; la seconda parte comprende il sifting, la stima dei parametri e la riconciliazione.
 
 \begin{figure}[bht] 
 \begin{center}
@@ -17,49 +17,110 @@ Il protocollo pu\`o essere suddiviso un due sezioni: la prima parte ha effettiva
 \end{figure}
 
 \subsection{Produzione, trasmissione e ricezione del segnale quantistico}\label{subse:sottosezione2-1-1}
-Alice prepara gli stati coerenti andando a estrarre i valori delle componenti di quadratura \textit{q} e \textit{p} da una distribuzione normale centrata in zero ($Q\sim P\sim N (0, V_{mod})$)~\cite{https://doi.org/10.1002/qute.201800011}. Da notare che la distribuzione normale dalla quale Alice estrae le componenti di quadratura non ha nulla a che fare con le distribuzioni normali che caratterizzano gli stati coerenti ma rappresenta in modo in cui i dati vengono modulati. Dopo la preparazione Alice trasmette a Bob gli stati coerenti attraverso un canale quantistico.
+Alice prepara gli stati coerenti andando a estrarre i valori delle componenti di quadratura $q$ e $p$ da una distribuzione normale centrata in zero ($q \sim {\mathcal N(0, V_{mod})}$ e $p \sim {\mathcal N(0, V_{mod})}$ )~\cite{https://doi.org/10.1002/qute.201800011}. Da notare che la distribuzione normale dalla quale Alice estrae le componenti di quadratura non ha nulla a che fare con le distribuzioni normali che caratterizzano gli stati coerenti ma rappresenta in modo in cui i dati vengono modulati. Dopo la preparazione Alice trasmette a Bob gli stati coerenti attraverso un canale di comunicazione, ad esempio una fibra ottica, che può essere anch'esso rappresentato come un canale quantistico.
 
-Il canale \`e caratterizzato da un certo valore di trasmittanza $T$ e di rumore $\xi$. A causa della trasmittanza durante la trasmissione il segnale perde potenza quindi le gaussiane che descrivono lo stato coerente saranno centrata in un valore pi\`u vicino allo zero rispetto al momento della preparazione, mentre il rumore che viene introdotto fa aumentare la varianza delle gaussiane cos\`i da accrescere l'incertezza nelle misure da parte di Bob.
+Il canale \`e caratterizzato da un certo valore di trasmittanza $T$ e di rumore $\xi$. A causa della trasmittanza durante la trasmissione il segnale perde potenza quindi le gaussiane che descrivono lo stato coerente saranno centrate in un valore pi\`u vicino allo zero rispetto al momento della preparazione, mentre il rumore che viene introdotto fa aumentare la varianza delle gaussiane cos\`i da accrescere l'incertezza nelle misure da parte di Bob.
 
-Per dare una rappresentazione matematica di quello che avviene ad uno stato coerente durante la trasmissione, possiamo andare a cosiderare un generico stato scelto da Alice $|a_i \rangle = | q_A + i p_A\rangle$. Come abbiamo detto nella sezione~\ref{se:sezione1-1} le componenti di quadratura rispondono ad una distribuzione di probabili\`a normale, quindi avremo:
+Per dare una rappresentazione matematica di quello che avviene ad uno stato coerente durante la trasmissione, possiamo andare a cosiderare un generico stato scelto da Alice $|\alpha_A \rangle = | q_A + i p_A\rangle$. Come abbiamo detto nella sezione~\ref{se:sezione1-1} le componenti di quadratura rispondono ad una distribuzione di probabili\`a normale, quindi avremo:
 \begin{equation}
 \begin{split}
-q_A \sim N(q_A, 1) \\
-p_A \sim N(p_A, 1)
+Q_A \sim \mathcal N(q_A, 1) \\
+P_A \sim \mathcal N(p_A, 1)
 \end{split}
 \end{equation}
-In ricezione, a causa del canale, Bob andr\`a ad effettuare la misura su uno stato coerente alterato $|b_i \rangle = | q_B + i p_B\rangle$ dove le componenti di quadratura rispondono alle seguenti distribuzioni gaussiane:
+In ricezione, a causa del canale, Bob andr\`a ad effettuare la misura su uno stato coerente alterato $|\alpha_B \rangle = | q_B + i p_B\rangle$ dove le componenti di quadratura rispondono alle seguenti distribuzioni gaussiane:
 \begin{equation}
 \begin{split}
-q_B \sim N(\sqrt{T} q_B, 1 + \xi) \\
-p_B \sim N(\sqrt{T} p_B, 1 + \xi)
+Q_B \sim \mathcal N(\sqrt{T} q_A, 1 + \xi) \\
+P_B \sim \mathcal N(\sqrt{T} p_A, 1 + \xi)
 \end{split}
 \end{equation}
 
 Per la misura dello stato coerente possono essere adottati due metodi diversi:
 \begin{itemize}
-\item \textbf{misura omodina}: Bob decide se misurare la componente di quadratura \textit{q} o \textit{p}, la decisione viene presa attraverso una distribuzione di probabilit\`a uniforme.
+\item \textbf{misura omodina}: Bob decide se misurare la componente di quadratura $q$ o $p$; la decisione viene presa attraverso una distribuzione di probabilit\`a uniforme.
 \item \textbf{misura eterodina}: questa misura permette di misurare entrambe le componenti contemporaneamente, per\`o c'\`e un prezzo da pagare perch\'e effettuando questa misura viene aggiunto del rumore e la varianza delle distribuzioni normali ha un incremento di $1$.
 \end{itemize}  
 
-In caso di misura omodina \`e necessaria un'operazione addizionale cio\'e il sifting. A questo punto del protocollo Alice \`e in posseso del doppio dei dati di Bob (in quanto Bob misura solo una della due componenti per ogni round) e per far si che abbiano la stessa quantit\`a di dati correlati Bob rivela ad Alice, su canale classico publico, quale componente ha misurato ad ogni round; Alice prende nota della componenti misurate e scarta le altre.\cite{milicevic_key_2018}
+In caso di misura omodina \`e necessaria un'operazione addizionale cio\'e il sifting. Infatti, a questo punto del protocollo Alice \`e in posseso del doppio dei dati di Bob (in quanto Bob misura solo una della due componenti per ogni round) e per far s\`i che abbiano la stessa quantit\`a di dati correlati Bob rivela ad Alice, su canale classico pubblico, quale componente ha misurato ad ogni round; Alice prende nota della componenti misurate e scarta le altre\cite{milicevic_key_2018}. Notare che questa operazione non compromette la sicurezza: Eve saprà solo quale tipo di misura ha eseguito Bob ad ogni round, ma non il risultato ottenuto né il valore  vero inviato da Alice.
 
 \subsection{Stima dei parametri}\label{subse:stima-parametri}
-Dopo avere terminato la fase di trasmissione degli stati, Alice e Bob rivelano una porzione random di dati in modo tale da confrontare ci\`o che \`e stato effetivamente inviato da Alice con le misure di Bob. Da questo confronto sono in grado di stimare l'effettiva trasmittanza e rumore in eccesso del canale di trasmissione e con queste stime possono calcolare l'informazione mutua $I_{AB}$ (informazione mutua tra Alice e Bob) e l'informazione mutua tra Eve e Bob $\chi_{EB}$. Nel caso in cui $\chi_{EB}$ risulti essere maggiore di $\beta I_{AB}$ \footnote{$\beta$ rappresenta l'accuratezza nel procesare i dati dopo la trasmissione e viene calcolata come il rapporto tra il code-rate scelto e la mutua informazione tra Alice e Bob} il protocollo viene abbortito.
+Dopo avere terminato la fase di trasmissione, Alice e Bob rivelano una porzione random di dati in modo tale da confrontare ci\`o che \`e stato effettivamente inviato da Alice con le misure di Bob. Da questo confronto sono in grado di stimare l'informazione mutua $I_{AB}$ (informazione mutua tra Alice e Bob) e l'informazione mutua tra Eve e Bob $\chi_{EB}$. Prima della effettiva stima delle mutue informazioni e necessario stimare trasmittanza e rumore del canale e calcolare altre quantit\`a che verranno utilizzare nel calcolo delle mutue informazioni.
+
+Secondo l'articolo~\cite{https://doi.org/10.1002/qute.201800011} l'equazione per il calcolo di $I_{AB}$ \`e:
+\begin{equation}
+I_{AB} = \frac{\mu}{2}\log_2(1 + SNR)
+\end{equation}
+con $\mu = 1$ se la misura \`e omodina e $\mu = 2$ per la misura eterodina. Mentre per il calcolo dell'$SNR$ abbiamo che:
+\begin{equation}
+SNR = \frac{\frac{1}{\mu} T V_{mod}}{1 + \frac{1}{\mu} \xi}
+\end{equation}
+
+Per la stima di rumore e trasmittanza del canale abbiamo bisogno dei parametri $a$, $b$ e $c$ che rappresentano le entry della matrice di covarianza $\Sigma_{AB}$.
+\begin{equation}
+\Sigma_{AB} =
+\begin{pmatrix}
+a \mathbbm{1}_2 & c \mathbbm{1}_2 \\
+c \mathbbm{1}_2 & b \mathbbm{1}_2
+\end{pmatrix}
+\end{equation}
+
+Le equazioni per il calcolo dei parametri vengono ancora una volta prese dai risultati dell'articolo~\cite{https://doi.org/10.1002/qute.201800011}:
+\begin{equation}
+\begin{split}
+a& = V_{mod} + 1 \\
+b& = \frac{\langle q_B^2 \rangle + \langle p_B^2 \rangle}{2} \\
+c& = \sqrt{\frac{V_{mod} + 2}{V_{mod}}} \cdot \biggl ( \frac{\langle q_Aq_B \rangle + \langle p_Ap_B \rangle}{2}\biggr )
+\end{split}
+\end{equation}
+
+Calcolati i parametri $a$, $b$ e $c$ possiamo andare a stimare il rumore e la trasmittanza:
+\begin{equation}
+\begin{split}
+T& = \frac{c^2}{V_{mod}^2 + 2V_{mod}} \\
+\xi& = b - TV_{mod} -1
+\end{split}
+\end{equation}
+
+Ora non ci resta che calcolare le quantit\`a $\nu_1$, $\nu_2$ e $\nu_3$ alle quali verr\`a applicata una funzione $g(\nu)$ che ci porter\`a al calcolo della mutua informazione fra Eve e Bob. Possiamo calcolare i valori di $\nu$ utilizzando i parametri calcolati in precedenza in questo modo:
+\begin{equation}
+\begin{split}
+\nu_1& = \frac{1}{2}[z + (b - a)] \\
+\nu_2& = \frac{1}{2}[z - (b - a)] \\
+\nu_3& = \sqrt{a (a - \frac{c^2}{b})}
+\end{split}
+\end{equation}
+con $z = \sqrt{(a + b)^2 - 4 c^2}$.
+
+Finalmente \`e giunto in momento di calcolare anche $\chi_{EB}$ in questo modo:
+\begin{equation}
+\chi_{EB} = g(\nu_1) + g(\nu_2) - g(\nu_3)
+\end{equation}
+con 
+\begin{equation}
+g(\nu) = \Bigl (\frac{\nu + 1}{2}\Bigr ) \log_2 \Bigl (\frac{\nu + 1}{2}\Bigr ) - \Bigl (\frac{\nu - 1}{2}\Bigr ) \log_2 \Bigl (\frac{\nu - 1}{2}\Bigr )
+\end{equation}
+
+In fine, dopo aver calcolato l'informazione mutua tra Alice e Bob e quella sta Eve e Bob vengono confrontati i risultati e nel caso in cui $\chi_{EB}$ risulti essere maggiore di $\beta I_{AB}$ \footnote{$\beta$ rappresenta l'accuratezza nel processare i dati dopo la trasmissione e viene calcolata come il rapporto tra il code-rate del codice classico scelto e la mutua informazione tra Alice e Bob} il protocollo viene abortito.
 
 \subsection{Riconciliazione delle informazioni}\label{subse:riconciliazione}
-Se la stima dei parametri ha avuto successo Alice e Bob effettuano una correzione degli errori dei segnali scambiati. La riconciliazione pu\`o avvenire in due forme: 
+Se la stima dei parametri ha avuto successo Alice e Bob sono in possesso di due stringhe di numeri reali diversi ma correlati, a causa degli errori introdotti durante la trasmissione sul canale e la misurazione di Bob. Devono pertanto effettuare una riconciliazione fra queste due stringhe, per assicurarsi di ottenere una sola stringa condivisa da entrambi. La riconciliazione pu\`o avvenire in due forme: 
 
 \begin{itemize}
-\item \textbf{diretta}: i dati di Alice sono i dati primari e Bob corregge i suoi dati di conseguenza.
-\item \textbf{inversa}: in questo caso sono i dati di Bob ad essere primari, vengono inviati ad Alice la quale li utilizza per correggere i propri dati.
+\item \textbf{diretta}: Alice produce un messaggio fittizio codificando i suoi dati (correlati a quelli di Bob) con una chiave. Bob basandosi sulle misure effettuate in fase di trasmissione cerca di estrarre la chiave dal messaggio fittizio;
+\item \textbf{inversa}: la procedura \`e la stessa della riconciliazione diretta solamente che vengono scambiate le parti, Bob produce il messaggio fittizio ed Alice cerca di estrarre la chiave.
 \end{itemize} 
+
+i dati di Alice sono i dati primari e Bob corregge i suoi dati di conseguenza.
+in questo caso sono i dati di Bob ad essere primari, vengono inviati ad Alice la quale li utilizza per correggere i propri dati.
  
-La riconciliazione diretta presenta un problema: non pu\`o essere utilizzata per valori di trasmittanza troppo bassi, questo perch\'e Eve avrebbe pi\'u informazione sui dati di Alice rispetto a Bob e quindi risulter\`a impossibile creare una chiave crittografica sicura. D'altro canto la riconciliazione inversa non presenta questo problema quindi \`e possibile utilizzarla anche con valori bassi di trasmittanza, per\`o \`e da tenere in considerazione che pi\`u bassa \`e la trasmittanza pi\`u sar\`a distruttivo l'effetto del rumore del canale.\cite{https://doi.org/10.1002/qute.201800011}
+La riconciliazione diretta presenta un problema: non pu\`o essere utilizzata per valori di trasmittanza troppo bassi, questo perch\'e Eve avrebbe pi\'u informazione sui dati di Alice rispetto a Bob e quindi risulterebbe impossibile creare una chiave crittografica sicura. D'altro canto la riconciliazione inversa non presenta questo problema quindi \`e possibile utilizzarla anche con valori bassi di trasmittanza, per\`o \`e da tenere in considerazione che pi\`u bassa \`e la trasmittanza pi\`u sar\`a distruttivo l'effetto del rumore del canale~\cite{https://doi.org/10.1002/qute.201800011}.
 
-A questo punto del protocollo Alice e Bob sono possesso del subset di dati non utilizzati per la stima dei parametri che andiamo a chiamare $\textbf{X}_0$ e $\textbf{Y}_0$; prima di effettuare la reconciliazione vengono prodotte, a partire dai dati in loro possesso, altre due sequenze di dati correlati. 
+Prima della riconciliazione vera a propria i dati in possesso ad Alice e Bob vengono normalizzati in modo tale da ottenere dei dati correlati. Se chiamiamo $\textbf{X}$ i dati in possesso ad Alice e $\textbf{Y}$ i dati in possesso a Bob, la relazione fra questi dati sar\`a $\textbf{X} = \textbf{Y} + \textbf{Z}$, dove $\textbf{Z}$ \`e una variabile aleatoria che risponde ad una distribuzione normale certata in zero con varianza $\frac{1}{V_{mod}}$. Attraverso questa normalizzazione in pratica, si ottiene lo stesso risultato che avremmo ottenuto se avessimo inviato ad Alice i dati di Bob attareverso una canale classico che aggiunge solamente rumore gaussiano.
 
-Quello che ci aspettiamo \`e che le varianze dei dati il possesso ad Alice e Bob siano rispettivamente:
+A questo punto del protocollo Alice e Bob sono in possesso del subset di dati non utilizzati per la stima dei parametri che andiamo a chiamare $\textbf{X}_0$ e $\textbf{Y}_0$; prima di effettuare la riconciliazione vengono prodotte, a partire dai dati in loro possesso, altre due sequenze di dati correlati. 
+
+Quello che ci aspettiamo \`e che le varianze dei dati in possesso di Alice e Bob siano rispettivamente:
 \begin{equation}
 \begin{split}
 V_{X_0} &= V_{mod} + 1 \\
@@ -73,18 +134,45 @@ Detto questo possiamo normalizzare $\textbf{X}_0$ e $\textbf{Y}_0$ in questo mod
 \textbf{Y} &= \frac{\textbf{Y}_0}{\sqrt{T V_{mod} + 1 + \xi}}
 \end{split}
 \end{equation}
-Cos\`i facendo abbiamo ottenuto altre due sequenze di dati $\textbf{X}$ e $\textbf{Y}$, correlate tra loro dall'equazione $\textbf{X} = \textbf{Y} + \textbf{Z}$, dove $\textbf{Z}$ \`e una variabile aleatoria che risponde ad una distribuzione normale centrata in zero e con variaza $V_z = \frac{1}{V_{mod}}$. Quindi normalizzando in questo modo abbiamo ottenuto lo stesso effetto che avremmo avuto se Bob avesso inviato ad Alice i proprio dati normalizzati $\textbf{Y}$ su un canale che aggiunge solamente rumore gaussiano\cite{milicevic_key_2018}.
+Cos\`i facendo abbiamo ottenuto altre due sequenze di dati $\textbf{X}$ e $\textbf{Y}$, correlate tra loro dall'equazione $\textbf{X} = \textbf{Y} + \textbf{Z}$, dove $\textbf{Z}$ \`e una variabile aleatoria che risponde ad una distribuzione normale centrata in zero e con varianza $V_z = \frac{1}{V_{mod}}$. Quindi normalizzando in questo modo abbiamo ottenuto lo stesso effetto che avremmo avuto se Bob avesso inviato ad Alice i proprio dati normalizzati $\textbf{Y}$ su un canale classico e pubblico che aggiunge solamente rumore gaussiano\cite{milicevic_key_2018}. Questo è il prototipo di canale di comunicazione classico utilizzato sin dai tempi di Shannon, detto canale di rumore bianco gaussiano additivo - Additive White Gaussian Noise Channel (AWGN). Per la trasmissione dati sull'AWGN è quindi possibile sfruttare una vasta gamma di codici studiati a partire dagli anni '60~\cite{Gallager_1972}-\cite{richardson2008modern}. 
 
-Il passo successivo per Bob sar\`a quello di generare una stringa di bit random $\underline{s} \in \{0,1\}^k$. Attraverso algoritmi di codifica LDPC viene calcolata una matrice \textbf{H} necessaria per aggiungere alla stringa \underline{s} dei bit ridondanti di parit\`a ottenendo la stringa $\underline{c} \in \{0,1\}^n$ dove $n$ corrisponde alla lunghezza della sottosequenza di dati non utilizzati per la stima dei parametri.
+Il passo successivo per Bob sar\`a quello di generare una stringa di bit random $\textbf{s} \in \{0,1\}^k$. Attraverso algoritmi di codifica LDPC~\cite{borwankar_low_nodate} viene calcolata una matrice \textbf{H} necessaria per aggiungere alla stringa \textbf{s} dei bit ridondanti di parit\`a ottenendo la stringa $\textbf{c} \in \{0,1\}^n$ dove $n$ corrisponde alla lunghezza della sottosequenza di dati non utilizzati per la stima dei parametri.
 
-Successivamente \underline{c} viene utilizzata per modulare il segno della sequenza \textbf{Y} ottendo cos\`i un nuovo messaggio \underline{m} tale che $m_i = Y_i(-1)^{c_i}$ per $i = 1,2,\dots,n$.
+Dopodich\'e vengono utilizzati dei codici LDPC (Low-Density Parity-Check)~\cite{borwankar_low_nodate} che rappresentano una classe di codici correttori di errori utilizzari nell'ambito delle telecomunicazioni. Una delle ragioni per cui questi codici sono largamente utilizzati \`e la loro abilit\`a di raggiungere prestazione vicine alla capacit\`a teorica del canale di comunicazione, nota come il limite di Shannon. I codici LDPC possono essere rappresentati in due modi:
+\begin{itemize}
+\item come una matrice di dimensioni $M \times N$ dove $N$ rappresenta la dimensione del messaggio che si vuole codificare ed $M = N - k$ con $k$ ottenuto dal prodotto tra $N$ e il code-rate. Questa matrice \`e prevalentemente composta da zeri e contiene un numero limitato di uno.
+\item come una grafo bipartito rappresentato da nodi check e nodi variabile; facendo riferimento alla rappresentazione matriciale il numero di nodi check \`e $M$ (numero di righe della matrice) e quello di nodi variabile \`e $N$ (numero di colonne della matrice). Gli uno contenuti nella matrice, nel grafo, sono denotati dagli archi che collegano un nodo variabile ad un nodo check.
+\end{itemize}
 
-Il messaggio \underline{m} viene trasmesso ad Alice su canale classico publico che assumiamo non introduca errori. Alice estrae da \underline{m} un messaggio fittizio \underline{r} con $r_i = \frac{m_i}{\textbf{X}_i}$ che corrisponde alla trasmisione su un canale Gaussiano con rumore di varianza $V_i = \frac{V_z}{|\textbf{X}_i|}$.
+Attraverso gli algoritmi LDPC viene calcolata una matrice \textbf{H} che sar\`a della forma $\bigl [ -P^T_{(M \times k)} | I_{N-k}\bigr ]$:
+\begin{equation}
+\textbf{H} =
+\begin{pmatrix}
+ 1 & 1 & 1 & 1 & 0 & 0 \\
+ 0 & 1 & 1 & 0 & 1 & 0 \\
+ 1 & 1 & 0 & 0 & 0 & 1
+\end{pmatrix}
+\end{equation}
+\captionof*{mat}{Esempio di una matrice con $M=3$ ed $N=6$.}
 
-Infine ver\`a utilizzato un algoritmo LDPC di decodifica per ottenere una stima $\hat{\underline{s}}$ della stringa $\underline s$ prodotta da Bob.
+Dalla matrice \textbf{H} possiamo ottenere la matrice generatore $\textbf{G} = \bigl [  I_{k} | P_{(k \times M)} \bigr ]$ da una matrice identit\`a di dimensione $k$ e la trasposta della matrice $P^T_{(M \times k)}$ :
+\begin{equation}
+\textbf{G} =
+\begin{pmatrix}
+ 1 & 0 & 0 & 1 & 0 & 1 \\
+ 0 & 1 & 0 & 1 & 1 & 1 \\
+ 0 & 0 & 1 & 1 & 1 & 0
+\end{pmatrix}
+\end{equation}
+
+Successivamente tramite in prodotto matriciale $\textbf{s} \times \textbf{G}$ tra le stringa \textbf{s} e la matrice generatore \textbf{G} si ottiene la stringa \textbf{c} che verr\`a utilizzata per modulare il segno della sequenza \textbf{Y} ottendo cos\`i un nuovo messaggio \textbf{m} tale che $m_i = Y_i(-1)^{c_i}$ per $i = 1,2,\dots,n$.
+
+Il messaggio \textbf{m} viene trasmesso ad Alice su canale classico publico che assumiamo non introduca errori. Alice estrae da \textbf{m} un messaggio fittizio \textbf{r} con $r_i = \frac{m_i}{X_i}$ che corrisponde alla trasmisione su un canale Gaussiano con rumore di varianza $V_i = \frac{V_z}{|X_i|}$.
+
+Infine Alice utilizzer\`a un algoritmo LDPC di decodifica per ottenere una stima $\textbf{c'}$ della stringa $\textbf c$ prodotta da Bob.
 
 \section{Discussione della sicurezza contro attacchi di lettura del segnale}
-Questo protocollo \`e particolarmente sicuro perch\'e consentente il rilevamento di un eventuale spia (Eve). Nel protocollo si assume che Eve sia in possesso di un computer quantistico e che abbia accesso completo al canale di comunicazione ed anche con queste assunzioni si \`e in grado di garantire la sicurezza per diversi tipi di attacchi.
+Questo protocollo \`e particolarmente sicuro perch\'e consente il rilevamento di un eventuale spia (Eve). Nel protocollo si assume che Eve sia in possesso di un computer quantistico e che abbia accesso completo al canale di comunicazione ed anche con queste assunzioni si \`e in grado di garantire la sicurezza per diversi tipi di attacchi.
 
 Gli attacchi presi in considerazione tipicamente sono tre e differiscono per la loro efficacia:
 \begin{itemize}
@@ -111,7 +199,7 @@ Gli attacchi presi in considerazione tipicamente sono tre e differiscono per la 
 \end{figure}
 \end{itemize} 
 
-Tornando al motivo per cui effettivamente si riesce a rilevare Eve possiamo, anche questa volta, dare il merito ai principi della fisica quantistica. Questo perch\`e in caso di misura da parte di Eve lo stato coerente trasmesso verr\`a alterato. Due esempio di attacchi che Eve pu\`o mettere in atto e le loro conseguenze sono: 
+Tornando al motivo per cui effettivamente si riesce a rilevare Eve possiamo, anche questa volta, dare il merito ai principi della fisica quantistica. Questo perch\`e in caso di misura da parte di Eve lo stato coerente trasmesso verr\`a alterato. Due esempi di attacchi che Eve pu\`o mettere in atto e le loro conseguenze sono: 
 \begin{itemize}
 \item sottrarre una parte del segnale per effettuare una misura sullo stesso, questo comporta una diminuzione di fotoni del segnale ricevuto da Bob
 \item misura il segnale attraverso una misura eterodina per stimare entrambe le componenti di quadratura. Utilizzando le componenti misurate come valori medi, realizza un nuovo stato coerente che trasmette a Bob. In questo modo siccome vengono misurati dei valori randomici e siccome la misura eterodina stessa introduce ulteriore rumore la varianza degli stati coerenti ricevuti da Bob sar\`a superiore a quella originaria. 
@@ -119,7 +207,7 @@ Tornando al motivo per cui effettivamente si riesce a rilevare Eve possiamo, anc
 In entrambi i casi, un attacco da parte di Eve non va a far altro che aumentare gli effetti distruttivi del canale di trasmissione.
 
 
-Tutte queste alterazione, in fase di stima dei parametri, produrranno dei valori indesiderati come $\chi > I_{AB}$. Queste incongruenza tra le stime e ci\`o che ci si aspettava dalla scelta dei paramettri iniziali portano a pensare che una spia si sia intromessa nella comunicazione. 
+Tutte queste alterazioni, in fase di stima dei parametri, produrranno dei valori indesiderati come $\chi_{EB} > I_{AB}$. Questa incongruenza tra le stime e ci\`o che ci si aspettava dalla scelta dei paramettri iniziali portano a pensare che una spia si sia intromessa nella comunicazione. 
 
 \begin{figure}[h] 
 \begin{center}

@@ -6,6 +6,10 @@ Charles~H. Bennett and Gilles Brassard.
 \newblock Quantum cryptography: Public key distribution and coin tossing.
 \newblock {\em Theoretical Computer Science}, 560:7--11, dec 2014.
 
+\bibitem[BS]{borwankar_low_nodate}
+Saumya Borwankar and Dhruv Shah.
+\newblock Low {Density} {Parity} {Check} {Code} ({LDPC} {Codes}) {Overview}.
+
 \bibitem[DH76]{1055638}
 W.~Diffie and M.~Hellman.
 \newblock New directions in cryptography.
@@ -16,6 +20,18 @@ Xiaodong Fan, Quanhao Niu, Tao Zhao, and Banghong Guo.
 \newblock Rate-compatible ldpc codes for continuous-variable quantum key
   distribution in wide range of snrs regime.
 \newblock {\em Entropy}, 24(10), 2022.
+
+\bibitem[Gal72]{Gallager_1972}
+Robert Gallager.
+\newblock {\em Information Theory and Reliable Communication}.
+\newblock Springer Vienna, 1972.
+
+\bibitem[GET{\etalchar{+}}21]{gumucs2021novel}
+Kadir G{\"u}m{\"u}{\c{s}}, Tobias~A Eriksson, Masahiro Takeoka, Mikio Fujiwara,
+  Masahide Sasaki, Laurent Schmalen, and Alex Alvarado.
+\newblock A novel error correction protocol for continuous variable quantum key
+  distribution.
+\newblock {\em Scientific reports}, 11(1):10465, 2021.
 
 \bibitem[LPF{\etalchar{+}}18]{https://doi.org/10.1002/qute.201800011}
 Fabian Laudenbach, Christoph Pacher, Chi-Hang~Fred Fung, Andreas Poppe,
@@ -37,6 +53,11 @@ Ronald~L Rivest, Adi Shamir, and Leonard Adleman.
 \newblock A method for obtaining digital signatures and public-key
   cryptosystems.
 \newblock {\em Communications of the ACM}, 21(2):120--126, 1978.
+
+\bibitem[RU08]{richardson2008modern}
+T.~Richardson and R.~Urbanke.
+\newblock {\em Modern Coding Theory}.
+\newblock Cambridge University Press, 2008.
 
 \bibitem[Sha49]{6769090}
 C.~E. Shannon.

@@ -1,59 +1,89 @@
-La realizzazione di questo simulatore per la distribuzione quantistica di chiavi con modulazione gaussiana di prefigge lo scopo di realizzare una chiave crittografica sicura, la quale successivamente potr\`a essere utilizzate per la codifica e decodifica di un messaggio trasmesso su un canale classico. 
+La realizzazione di questo simulatore per la distribuzione quantistica di chiavi con modulazione gaussiana di prefigge lo scopo di realizzare una chiave crittografica sicura condivisa tra due parti, la quale successivamente potr\`a essere utilizzate per la codifica e decodifica di un messaggio trasmesso su un canale pubblico classico. 
 
 Come tecnologie \`e stato utilizzato il linguaggio di programmazione C++. I motivi principali di questa scelta sono tre: la velocit\`a del linguaggio di programmazione, la disponidilit\`a di librerie che implementano le distribuzioni di probabilit\`a necessarie alla simulazione e la presenza di librerie esterne che implementano due algoritmi indispensabili per la correzzione degli errori.
 
-Anche se il progetto \`e stato realizzato utilizzando C++ \`e stato deciso di illustrare quanto \`e stato fatto attraverso dello psdeudo-codice in modo tale da non legare la simulazione ad una specifico linguaggio di programmazione ed aggevolarne la rimplementazione in qualunque linguaggio di programmazione si voglia utilizzare, di fatto verr\`a utilizzato della pseudo-codice anche per descrivere il due algoritmi per la correzzione degli errori.
+Anche se il progetto \`e stato realizzato utilizzando C++ \`e stato deciso di illustrare quanto \`e stato fatto attraverso dello psdeudo-codice in modo tale da non legare la simulazione ad una specifico linguaggio di programmazione ed aggevolarne la rimplementazione in qualunque linguaggio di programmazione si voglia utilizzare.
 
-Prima di addentranci nella descrizione delle fasi della simulazione, \`e bene andare a definire delle costanti necessarie per il corretto funzionamente del simulatore. Le costanti in questione sono il rumore e la trasmittanza del canale, rispettivamente $\xi = 0.005$ e $T=0.1$, la varianza $V_{mod}=5.226$ della modulazione e l'accuratezza della riconciliazione $\beta = 0.993$. I valori per queste costanti sono stati scelti in base ai risultati ottenuti negli articoli~\cite{https://doi.org/10.1002/qute.201800011} e \cite{e24101463}.
+Prima di addentranci nella descrizione delle fasi della simulazione, \`e bene andare a definire delle costanti necessarie per il corretto funzionamente del simulatore. Le costanti in questione sono il rumore e la trasmittanza del canale, rispettivamente $\xi = 0.005$ e $T=0.1$, la varianza $V_{mod}=5.226$ della modulazione ed il code-rate $R = 0.3$. I valori per queste costanti sono stati scelti in base ai risultati ottenuti negli articoli~\cite{https://doi.org/10.1002/qute.201800011} e \cite{e24101463}.
 
 \section{Preparazione, trasmissione e misura}
 
-\subsection{Preparazione dello stato coerente}
-Per la realizzazione degli stati coerenti da trasmettere sul canale vengono scelti due valori che rappresentano i valori medi delle due gaussiane con varianza unitaria che caratterizzano lo stato. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratata in zero e con varianza $V_{mod}$. Queste informazioni sono salvare in una struttura dati che oltre a contenere tutte le informazioni necessaria per caratterizzare lo stato coerente persenta dei tag che verranno utilizzati nella sottosezione~\ref{se:sifting} per distinguere la componenti di quadratura $p$ e $q$.
+\subsection{Preparazione dello stato coerente}\label{subse:prep-stato}
+Per la realizzazione degli stati coerenti da trasmettere sul canale vengono scelti due valori che rappresentano i valori medi delle due gaussiane con varianza unitaria che caratterizzano lo stato. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratata in zero e con varianza $V_{mod}$. Queste informazioni sono salvare in una struttura dati che oltre a contenere tutte le informazioni necessaria per caratterizzare lo stato coerente persenta dei tag che verranno utilizzati nella sottosezione~\ref{subse:sifting} per distinguere le componenti di quadratura $p$ e $q$.
 
 \subsection{Trasmissione su canale rumoroso}
-Per ogni stato coerente prodotto si simula la trasmissione in un canale rumoroso. Le operazioni che vengono effettuare in pratica sono: il prodotto dei valori medi della gaussiane per la radice quadrata della trasmittanza e la somma di $\xi$ alla varianza.
+Per ogni stato coerente prodotto si simula la trasmissione in un canale rumoroso. Le operazioni che vengono effettuare in pratica sono: il prodotto dei valori medi della gaussiane per la radice quadrata della trasmittanza e la somma di $\xi$ alla varianza. Quindi le le componenti di quadratura sarrano descritte dalla seguenti distribuzioni normali:
+\begin{equation}\label{eq:normal_dist_bob}
+\begin{split}
+q\sim \mathcal N(\sqrt{T} q_B, 1 + \xi) \\
+p \sim \mathcal N(\sqrt{T} p_B, 1 + \xi)
+\end{split}
+\end{equation}
 \subsection{Misura omodina del segnale}
+Per la misurazione del segnale verr\`a effettuata una misura omodina che consiste in due fasi. Per prima cosa si decide quale delle componenti di quadratura misurare, la decisione viene presa attraverso un distribuzione di probabilit\`a uniforme. Questo significa che le componenti $q$ e $p$ hanno la stessa probabilit\`a di essere misurate.
+
+Successivamente avviene l'effetiva misura che consiste nell'estrarre un valore da una distribuzione normale inizzializzata come nell'equazione~\ref{eq:normal_dist_bob}.
 
 \section{Stima dei parametri}
+La stima dei parametri \`e una fase indispensabile del protocollo perch\'e permette di determinare se la trasmissione \`e stata sicura oppure \`e avvenuta l'intromissione di una spia.
 
 \subsection{Sifting}\label{subse:sifting}
-\subsection{Stima delle varianze dei dati trasmessi, ricevuti e delle loro covarianza}
+Prima di procede con l'effettiva stima dei parametri \`e necessario effettua il sitfing (vaglio delle informazioni). A questo punto delle simulazione si hanno gli stati coerenti inviati e l'insieme delle misure delle componenti. Dal momento che viene effettuata la misura di una sola componente per ogni round di trasmissione, i dati trasmessi sono il doppio di quelli misurati. L'operazione che viene effettuata \`e molto semplice: per ogni misura effettuata viene determinata quale componente \`e stata misurata, questo grazie al tag di cui abbiamo parlato nella sottosezione~\ref{subse:prep-stato}; per il round di trasmissione corrispondente vengono mantenute solamente le informazione di valore medio e tag relative alla componente misurata scartando di resto.
+
+Questa operazione viene effettata per ogni coppia di dati trasmessi e misurati.
+
 \subsection{Stima mutue informazioni}
-\subsection{Accertamento sicurezza trasmissione}
+A questo punto possiamo effettivamente andare a stimare a partire dai dati trasmessi e quelli misurari la mutua informazione fra Alice e Bob e quella tra Eve e Bob. Per fare questo utilizzaremo le formule presentate nella sottosezione~\ref{subse:stima-parametri}. 
 
 \section{Riconciliazione}
+A questo punto della simulazione si \`e in possesso del subset di dati non utilizzati per la stima dei parametri che andiamo a chiamare $\textbf{X}_0$ e $\textbf{Y}_0$; prima di effettuare la reconciliazione vengono prodotte, a partire da questi dati, altre due sequenze di dati correlati. 
 
-\subsection{Generazione stringa random di bit}
+Quello che ci aspettiamo \`e che le varianze dei dati siano rispettivamente:
+\begin{equation}
+\begin{split}
+V_{X_0} &= V_{mod} + 1 \\
+V_{Y_0} &= T V_{mod} + 1 + \xi
+\end{split}
+\end{equation}
+Detto questo possiamo normalizzare $\textbf{X}_0$ e $\textbf{Y}_0$ in questo modo:
+\begin{equation}
+\begin{split}
+\textbf{X} &= \frac{\textbf{X}_0}{\sqrt{V_{mod}}}\\
+\textbf{Y} &= \frac{\textbf{Y}_0}{\sqrt{T V_{mod} + 1 + \xi}}
+\end{split}
+\end{equation}
+Cos\`i facendo abbiamo ottenuto altre due sequenze di dati $\textbf{X}$ e $\textbf{Y}$, correlate tra loro dall'equazione $\textbf{X} = \textbf{Y} + \textbf{Z}$, dove $\textbf{Z}$ \`e una variabile aleatoria che risponde ad una distribuzione normale centrata in zero e con variaza $V_z = \frac{1}{V_{mod}}$. Quindi normalizzando in questo modo abbiamo ottenuto lo stesso effetto che avremmo avuto se Bob avesso inviato ad Alice i proprio dati normalizzati $\textbf{Y}$ su un canale che aggiunge solamente rumore gaussiano\cite{milicevic_key_2018}.
 
-\subsection{Algoritmo Progessive Edge Growth}
+Il passo successivo sar\`a quello di generare una stringa di bit random $\underline{s} \in \{0,1\}^k$. Attraverso l'algoritmo di codifica classic PEG~\ref{subse:algorithms} viene calcolata una matrice \textbf{H} necessaria per aggiungere alla stringa \underline{s} dei bit ridondanti di parit\`a ottenendo la stringa $\underline{c} \in \{0,1\}^n$ dove $n$ corrisponde alla lunghezza della sottosequenza di dati non utilizzati per la stima dei parametri.
+
+Successivamente $\underline{c}$ viene utilizzata per modulare il segno della sequenza $\textbf{Y}$ ottendo cos\`i un nuovo messaggio $\underline{m}$ tale che $m_i = Y_i(-1)^{c_i}$ per $i = 1,2,\dots,n$.
+
+Il messaggio $\underline{m}$ viene trasmesso ad Alice su canale classico publico che assumiamo non introduca errori. Alice estrae da $\underline{m}$ un messaggio fittizio $\underline{r}$ con $r_i = \frac{m_i}{\textbf{X}_i}$ che corrisponde alla trasmisione su un canale Gaussiano con rumore di varianza $V_i = \frac{V_z}{|\textbf{X}_i|}$. 
+
+Per tutti gli elementi del messaggio $\underline{r}$ vengono calcolati i valori di varianza che a loro volta vengono utilizzati per calcolare la log likelihood ratios (LLRs) che sono definite come~\cite{gumucs2021novel}:
+\begin{equation}
+l_i = \log \frac{P(R_i = r_i| C_i = 0)}{P(R_i = r_i| C_i = 1)} = \frac{2r_i}{V_i}
+\end{equation}
+
+Infine ver\`a utilizzato l'algoritmo \textit{sum-product}~\ref{subse:algorithms} di decodifica per ottenere una stima ${\underline{s}}$ della stringa $\underline s$ prodotta da Bob.
+
+\subsection{Algoritmi Sum-Product e classic PEG}\label{subse:algorithms}
+
+\begin{algorithm}
+\caption{: Sum-product decoding algorithm}
+\begin{algorithmic}
+\STATE pippo
+\end{algorithmic}
+\end{algorithm}
 
 
 \begin{algorithm}
 \caption{: Classic PEG algorithm}
 \begin{algorithmic}
-\STATE pippo 
+\STATE Input:  \STATE output
 \end{algorithmic}
 \end{algorithm}
 
-
-\begin{algorithm}
-\caption{: Sum-product decoding algorithm}
-\begin{algorithmic}
-\STATE pippo
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Messaggio fittizio}
-
-\subsection{Algoritmo Sum-Product}
-
-\begin{algorithm}
-\caption{: Sum-product decoding algorithm}
-\begin{algorithmic}
-\STATE pippo
-\end{algorithmic}
-\end{algorithm}
 
 
 
