@@ -93,18 +93,36 @@ Per tutti gli elementi del messaggio $\underline{r}$ vengono calcolati i valori 
 l_i = \log \frac{P(R_i = r_i| C_i = 0)}{P(R_i = r_i| C_i = 1)} = \frac{2r_i}{V_i}
 \end{equation}
 
-Infine ver\`a utilizzato l'algoritmo \textit{sum-product}~\ref{subse:algorithms} di decodifica per ottenere una stima ${\underline{s}}$ della stringa $\underline s$ prodotta da Bob.
+Infine ver\`a utilizzato l'algoritmo \textit{sum-product}~\ref{al:sum-prod} di decodifica per ottenere una stima ${\underline{s}}$ della stringa $\underline s$ prodotta da Bob.
+
+\begin{algorithm}[H]
+\caption{: Riconciliazione}
+\begin{algorithmic}[1]
+\State \textbf{Step 1:} Genera string di bit random
+	\State $\textbf{s} \leftarrow generaStringaBit()$	\Comment $\textbf{s} \in \{0,1\}^k$
+\State \textbf{Step 2:} Crea la matrice $\textbf{H}$ e la matrice $\textbf{G}$
+	\State $\textbf{H} \leftarrow peg(M,N, \lambda )$	\Comment {l'algoritmo PEG prendo come parametri il grado dei } 
+	\State {}							\Comment { nodi variabile, il numero di righe e di colonne}
+	\State $ \textbf{G} \leftarrow generaG(\textbf{H})$
+\State \textbf{Step 3:} Genera la code-word
+	\State $\textbf{c} \leftarrow \textbf{s} \times \textbf{G}$
+\State \textbf{Step 4:} Viene modulato il segno dei dati di Bob
+	\State $\textbf{m} \leftarrow modulazione(\textbf{Y})$
+\State \textbf{Step 5:} Estrazione del messaggi fittizio da parte di Alice e calcolo LLR
+	\State $\textbf{r} \leftarrow messaggioFittzio(\textbf{m})$
+	\State $\textbf{LLR} \leftarrow calcoloLLR(\textbf{r}, \textbf{X})$
+\State \textbf{Step 6:} Stima della code-word
+	\State $\textbf{c'} \leftarrow sumProd(LLR, H)$
+\end{algorithmic}
+\end{algorithm}
 
 
 
 \subsection{Algoritmi Sum-Product e classic PEG}\label{subse:algorithms}
 
-\algnewcommand\algorithmicforeach{\textbf{for each}}
-\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
 
-
-\begin{algorithm}
-\caption{: Sum-product decoding algorithm}
+\begin{algorithm} 
+\caption{: Sum-product decoding algorithm}\label{al:sum-prod}
 \begin{algorithmic}
 \State \textbf{Step 1: }Inizializzazione dei messaggi dei nodi variabile $L(q_{i,j})^{\langle 0 \rangle}$
 \For {$i \leftarrow 0; M$}
@@ -154,10 +172,7 @@ Infine ver\`a utilizzato l'algoritmo \textit{sum-product}~\ref{subse:algorithms}
 	\Else
 		\State$C_i \leftarrow 1$
 	\EndIf
-	
 \EndFor
-
-
 
 \end{algorithmic}
 \end{algorithm}

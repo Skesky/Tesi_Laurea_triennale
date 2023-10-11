@@ -26,11 +26,16 @@
 \usepackage{algorithm, float}	%pacchetti utilizzati per la scrittura di pseudo-codice
 \usepackage{algpseudocode}
 
+\algnewcommand\algorithmicforeach{\textbf{for each}}			%definizione del for each loop
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
 
 \usepackage{caption}	%pacchetto per aggiungere le caption alle minipage
 \DeclareCaptionType[within=section]{mat}
 
 % --- FINE riachiamo di pacchetti di utilità
+
+
 
 \begin{document}
 % ----- Pagine di fronespizio, numerate in romano (i,ii,iii,iv...) (obbligatorio)
