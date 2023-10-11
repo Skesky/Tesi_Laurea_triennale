@@ -81,6 +81,8 @@ int main(int argc, char const *argv[]){
         matrixP.push_back(column);
     }
 
+    parityCheckMatrix.close();
+
 
     string codeString = randomBits.to_string().append(recon.prdMatrix(randomBits, matrixP));
 
