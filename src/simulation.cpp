@@ -12,7 +12,8 @@
 
 using namespace std;
 
-Simulation::Simulation(int round, string fileName){
+Simulation::Simulation(int round, string fileName, bool withEve){
+    this->eve = withEve;
     this->nRound = round;
     this->outputFile.open(fileName + ".csv"); 
     this->aliceStates = (State*) malloc(N_ROUND * sizeof(State));
@@ -43,7 +44,13 @@ void Simulation::startSimulation(){
 
         aliceStates[i] = alice.chooseState(generator);
         
-        bobMeasures[i] = bob.measure(channel.trasmission(aliceStates[i]), generator);
+        if(!eve){
+            bobMeasures[i] = bob.measure(channel.trasmission(aliceStates[i]), generator);
+        }
+        else{
+            bobMeasures[i] = bob.measure(channel.trasmissionWithEve(aliceStates[i]), generator);
+        }
+        
 
         outputFile << aliceStates[i].q.value << ';' << aliceStates[i].p.value << ';' << aliceStates[i].p.value << ";" 
                    << bobMeasures[i].first << ";" << bobMeasures[i].second << endl;

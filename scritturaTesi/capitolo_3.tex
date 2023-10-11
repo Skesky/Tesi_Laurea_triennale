@@ -34,11 +34,10 @@ La stima dei parametri \`e una fase indispensabile del protocollo perch\'e perme
 
 Chiamiamo i subset di dati dopo il sifting di Alice e Bob utilizzati per la stima dei parametri $Q_A$ e $Q_B$ per la componente di quadrature $q$ e $P_A$ e $P_B$ per la componente di quadratura $p$.
 
-\subsection{Stima mutue informazioni}
-A questo punto possiamo effettivamente andare a stimare a partire dai dati trasmessi e quelli misurari la mutua informazione fra Alice e Bob e quella tra Eve e Bob. Per fare questo utilizzaremo le formule presentate nella sottosezione~\ref{subse:stima-parametri}. 
+Svolte tutte le operazioni illustrate dall'algoritmo~\ref{al:stima-param} per ottenere la stima dell'informazione mutua tra Alice e Bob $I_{AB}$ e di quella tra Eve e Bob $\chi_{EB}$ le andiamo a confrontare. Nel caso in cui $I_{AB}$ risulti minore di $\chi_{EB}$ la simulazione si interrompe e deve ricominciare da capo.
 
 \begin{algorithm}[H]
-\caption{: Stima dei parametri}
+\caption{: Stima dei parametri}\label{al:stima-param}
 \begin{algorithmic}[1]
 \State \textbf{Step 1:} Stima dei parametri a, b e c \newline
 	$a \leftarrow V_{mod} + 1$ \newline
@@ -64,39 +63,14 @@ A questo punto possiamo effettivamente andare a stimare a partire dai dati trasm
 
 
 \section{Riconciliazione}
-A questo punto della simulazione si \`e in possesso del subset di dati non utilizzati per la stima dei parametri che andiamo a chiamare $\textbf{X}_0$ e $\textbf{Y}_0$; prima di effettuare la reconciliazione vengono prodotte, a partire da questi dati, altre due sequenze di dati correlati. 
+A questo punto della simulazione si \`e in possesso del subset di dati non utilizzati per la stima dei parametri che andiamo a chiamare $\textbf{X}_0$ e $\textbf{Y}_0$; prima di effettuare la reconciliazione vengono prodotte, a partire da questi dati, altre due sequenze di dati correlati che chiameremo $\textbf{X}$ e $\textbf{Y}$ come illustrato nell'equazione~\ref{eq:normalizzazione}. 
 
-Quello che ci aspettiamo \`e che le varianze dei dati siano rispettivamente:
-\begin{equation}
-\begin{split}
-V_{X_0} &= V_{mod} + 1 \\
-V_{Y_0} &= T V_{mod} + 1 + \xi
-\end{split}
-\end{equation}
-Detto questo possiamo normalizzare $\textbf{X}_0$ e $\textbf{Y}_0$ in questo modo:
-\begin{equation}
-\begin{split}
-\textbf{X} &= \frac{\textbf{X}_0}{\sqrt{V_{mod}}}\\
-\textbf{Y} &= \frac{\textbf{Y}_0}{\sqrt{T V_{mod} + 1 + \xi}}
-\end{split}
-\end{equation}
-Cos\`i facendo abbiamo ottenuto altre due sequenze di dati $\textbf{X}$ e $\textbf{Y}$, correlate tra loro dall'equazione $\textbf{X} = \textbf{Y} + \textbf{Z}$, dove $\textbf{Z}$ \`e una variabile aleatoria che risponde ad una distribuzione normale centrata in zero e con variaza $V_z = \frac{1}{V_{mod}}$. Quindi normalizzando in questo modo abbiamo ottenuto lo stesso effetto che avremmo avuto se Bob avesso inviato ad Alice i proprio dati normalizzati $\textbf{Y}$ su un canale che aggiunge solamente rumore gaussiano\cite{milicevic_key_2018}.
+Poi viene prodotta la stringa $\textbf{s}$ la quale viene codificata attraverso l'algoritmo PEG (Progresive Edge Growth) per ottente la stringa $\textbf{c}$. Utilizziamo la stringa $\textbf{c}$ per modulare il segno della sequenza di dati $\textbf{Y}$ di Bob per produrre il messaggio  $\textbf{m}$ che verr\`a inviato ad Alice. Da messaggio  $\textbf{m}$ Alice estrarr\`a una messaggio fittizio  $\textbf{r}$ che le permettar\`a, attraverso l'utilizzo dell'algoritmo $\textit{sum-product}$~\ref{al:sum-prod}, di ottenere una stima della stringa di bit  $\textbf{c}$ prodotta originariamente da Bob.
 
-Il passo successivo sar\`a quello di generare una stringa di bit random $\underline{s} \in \{0,1\}^k$. Attraverso l'algoritmo di codifica classic PEG~\ref{subse:algorithms} viene calcolata una matrice \textbf{H} necessaria per aggiungere alla stringa \underline{s} dei bit ridondanti di parit\`a ottenendo la stringa $\underline{c} \in \{0,1\}^n$ dove $n$ corrisponde alla lunghezza della sottosequenza di dati non utilizzati per la stima dei parametri.
-
-Successivamente $\underline{c}$ viene utilizzata per modulare il segno della sequenza $\textbf{Y}$ ottendo cos\`i un nuovo messaggio $\underline{m}$ tale che $m_i = Y_i(-1)^{c_i}$ per $i = 1,2,\dots,n$.
-
-Il messaggio $\underline{m}$ viene trasmesso ad Alice su canale classico publico che assumiamo non introduca errori. Alice estrae da $\underline{m}$ un messaggio fittizio $\underline{r}$ con $r_i = \frac{m_i}{\textbf{X}_i}$ che corrisponde alla trasmisione su un canale Gaussiano con rumore di varianza $V_i = \frac{V_z}{|\textbf{X}_i|}$. 
-
-Per tutti gli elementi del messaggio $\underline{r}$ vengono calcolati i valori di varianza che a loro volta vengono utilizzati per calcolare la log likelihood ratios (LLRs) che sono definite come~\cite{gumucs2021novel}:
-\begin{equation}
-l_i = \log \frac{P(R_i = r_i| C_i = 0)}{P(R_i = r_i| C_i = 1)} = \frac{2r_i}{V_i}
-\end{equation}
-
-Infine ver\`a utilizzato l'algoritmo \textit{sum-product}~\ref{al:sum-prod} di decodifica per ottenere una stima ${\underline{s}}$ della stringa $\underline s$ prodotta da Bob.
+Tutte queste operazione vengono illustrate nell'algoritmo~\ref{al:recon} facendo riferimento alla sottosezione~\ref{subse:riconciliazione}.
 
 \begin{algorithm}[H]
-\caption{: Riconciliazione}
+\caption{: Riconciliazione}\label{al:recon}
 \begin{algorithmic}[1]
 \State \textbf{Step 1:} Genera string di bit random
 	\State $\textbf{s} \leftarrow generaStringaBit()$	\Comment $\textbf{s} \in \{0,1\}^k$
@@ -109,7 +83,7 @@ Infine ver\`a utilizzato l'algoritmo \textit{sum-product}~\ref{al:sum-prod} di d
 \State \textbf{Step 4:} Viene modulato il segno dei dati di Bob
 	\State $\textbf{m} \leftarrow modulazione(\textbf{Y})$
 \State \textbf{Step 5:} Estrazione del messaggi fittizio da parte di Alice e calcolo LLR
-	\State $\textbf{r} \leftarrow messaggioFittzio(\textbf{m})$
+	\State $\textbf{r} \leftarrow messaggioFittizio(\textbf{m})$
 	\State $\textbf{LLR} \leftarrow calcoloLLR(\textbf{r}, \textbf{X})$
 \State \textbf{Step 6:} Stima della code-word
 	\State $\textbf{c'} \leftarrow sumProd(LLR, H)$

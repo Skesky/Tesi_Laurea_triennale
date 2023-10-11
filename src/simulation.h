@@ -14,9 +14,10 @@ class Simulation{
     random_device rd;
     State* aliceStates;
     pair<double, Component> *bobMeasures;
+    bool eve;
 
     public:
-    Simulation(int, string);
+    Simulation(int, string, bool);
     State* getAliceStates();
     pair<double, Component>* getBobMeasures();
     void freeMem();

@@ -39,6 +39,16 @@ void ParamEstimation::parameterEstimation(){
     mutualInfoAliceBob();
     mutInfoEveBob();
 
+    if(this->mutInfoAB < this->mutInfoEB){
+        cout << "Informazione mutua tra Eve e Bob maggiore di quella tra Alice e Bob" << endl;
+        cout << "TERMINAZIONE SIMULAZIONE" << endl;
+        exit(1);
+    } else if(isnan(this->mutInfoEB)){
+        cout << "Stima dei parametri non andata a buon fine" << endl;
+        cout << "Mutua informazione tra Eve e Bob: " << this->mutInfoEB << endl;
+        exit(1);
+    }
+
 }
 
 void ParamEstimation::sifter(pair<double, Component>* bob, State* alice){

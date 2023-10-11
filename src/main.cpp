@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <utility>
-#include <string>
+#include <cstring>
 #include <bitset>
 #include <fstream>
 
@@ -20,9 +20,26 @@
 
 
 
-int main(){
+int main(int argc, char const *argv[]){
 
-    Simulation sim(N_ROUND, "coherent_states");
+    bool eve;
+
+    if(argc == 1){
+        eve = false;
+    } else if(argc == 2 && strcmp(argv[1], "-eve") == 0){
+        eve = true;
+    } else{
+        cout << "Utilizzo corretto:" << endl;
+        cout << "- Senza spia: ./simulazione" << endl;
+        cout << "- Con spia: ./simulazione -eve" << endl;
+        exit(1);
+    }
+
+    if(eve)
+        cout << "AVVIO SIMULAZIONE CON SPIA" << endl;
+
+
+    Simulation sim(N_ROUND, "coherent_states", eve);
     ParamEstimation param(N_ROUND);
     
 
