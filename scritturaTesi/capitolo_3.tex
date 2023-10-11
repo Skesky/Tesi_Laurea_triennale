@@ -1,28 +1,29 @@
-La realizzazione di questo simulatore per la distribuzione quantistica di chiavi con modulazione gaussiana di prefigge lo scopo di realizzare una chiave crittografica sicura condivisa tra due parti, la quale successivamente potr\`a essere utilizzate per la codifica e decodifica di un messaggio trasmesso su un canale pubblico classico. 
+La realizzazione di questo simulatore per la distribuzione quantistica di chiavi con modulazione gaussiana si prefigge lo scopo di realizzare una chiave crittografica sicura condivisa tra due parti, la quale successivamente potr\`a essere utilizzate per la codifica e decodifica di un messaggio trasmesso su un canale pubblico classico. 
 
-Come tecnologie \`e stato utilizzato il linguaggio di programmazione C++. I motivi principali di questa scelta sono tre: la velocit\`a del linguaggio di programmazione, la disponidilit\`a di librerie che implementano le distribuzioni di probabilit\`a necessarie alla simulazione e la presenza di librerie esterne che implementano due algoritmi indispensabili per la correzzione degli errori.
+Per lo sviluppo del simularore \`e stato utilizzato il linguaggio di programmazione C++. I motivi principali di questa scelta sono tre: la velocit\`a del linguaggio di programmazione, la disponidilit\`a di librerie che implementano le distribuzioni di probabilit\`a necessarie alla simulazione e la presenza di librerie esterne che implementano due algoritmi indispensabili per la correzione degli errori.
 
-Anche se il progetto \`e stato realizzato utilizzando C++ \`e stato deciso di illustrare quanto \`e stato fatto attraverso dello psdeudo-codice in modo tale da non legare la simulazione ad una specifico linguaggio di programmazione ed aggevolarne la rimplementazione in qualunque linguaggio di programmazione si voglia utilizzare.
+Anche se il progetto \`e stato realizzato utilizzando C++ \`e stato deciso di illustrare quanto \`e stato fatto attraverso dello psdeudo-codice in modo tale da non legare la simulazione ad una specifico linguaggio di programmazione ed agevolarne la re-mplementazione in qualunque linguaggio di programmazione si voglia utilizzare.
 
 Prima di addentranci nella descrizione delle fasi della simulazione, \`e bene andare a definire delle costanti necessarie per il corretto funzionamente del simulatore. Le costanti in questione sono il rumore e la trasmittanza del canale, rispettivamente $\xi = 0.005$ e $T=0.1$, la varianza $V_{mod}=5.226$ della modulazione ed il code-rate $R = 0.3$. I valori per queste costanti sono stati scelti in base ai risultati ottenuti negli articoli~\cite{https://doi.org/10.1002/qute.201800011} e \cite{e24101463}.
 
 \section{Preparazione, trasmissione e misura}
 
 \subsection{Preparazione dello stato coerente}\label{subse:prep-stato}
-Per la realizzazione degli stati coerenti da trasmettere sul canale vengono scelti due valori che rappresentano i valori medi delle due gaussiane con varianza unitaria che caratterizzano lo stato. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratata in zero e con varianza $V_{mod}$. Queste informazioni sono salvare in una struttura dati che oltre a contenere tutte le informazioni necessaria per caratterizzare lo stato coerente persenta dei tag che verranno utilizzati nella sottosezione~\ref{subse:sifting} per distinguere le componenti di quadratura $p$ e $q$.
+Per la realizzazione degli stati coerenti da trasmettere sul canale vengono scelti due valori che rappresentano i valori medi delle due gaussiane con varianza unitaria che caratterizzano lo stato. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratata in zero e con varianza $V_{mod}$. Queste informazioni sono salvate in una struttura dati che, oltre a contenere tutte le informazioni necessarie per caratterizzare lo stato coerente, presenta dei tag che verranno utilizzati nella sottosezione~\ref{subse:sifting} per distinguere le componenti di quadratura $p$ e $q$.
 
 \subsection{Trasmissione su canale rumoroso}
-Per ogni stato coerente prodotto si simula la trasmissione in un canale rumoroso. Le operazioni che vengono effettuare in pratica sono: il prodotto dei valori medi della gaussiane per la radice quadrata della trasmittanza e la somma di $\xi$ alla varianza. Quindi le le componenti di quadratura sarrano descritte dalla seguenti distribuzioni normali:
+Per ogni stato coerente prodotto si simula la trasmissione in un canale rumoroso. Le operazioni che vengono effettuate in pratica sono: il prodotto dei valori medi della gaussiane per la radice quadrata della trasmittanza e la somma di $\xi$ alla varianza. Quindi le le componenti di quadratura saranno descritte come nell'espressione~\ref{eq:stato-bob}.
+
+\subsection{Misura omodina del segnale}
+Per la misurazione del segnale verr\`a effettuata una misura omodina che consiste in due fasi. Per prima cosa si decide quale delle componenti di quadratura misurare: la decisione viene presa attraverso un distribuzione di probabilit\`a uniforme. Questo significa che le componenti $q$ e $p$ hanno la stessa probabilit\`a di essere misurate.
+
+Successivamente avviene l'effetiva misura che consiste nell'estrarre un valore da una delle due distribuzione normali:
 \begin{equation}\label{eq:normal_dist_bob}
 \begin{split}
-q\sim \mathcal N(\sqrt{T} q_B, 1 + \xi) \\
-p \sim \mathcal N(\sqrt{T} p_B, 1 + \xi)
+Q_B \sim \mathcal N(\sqrt{T} q_B, 1 + \xi) \\
+P_B \sim \mathcal N(\sqrt{T} p_B, 1 + \xi)
 \end{split}
 \end{equation}
-\subsection{Misura omodina del segnale}
-Per la misurazione del segnale verr\`a effettuata una misura omodina che consiste in due fasi. Per prima cosa si decide quale delle componenti di quadratura misurare, la decisione viene presa attraverso un distribuzione di probabilit\`a uniforme. Questo significa che le componenti $q$ e $p$ hanno la stessa probabilit\`a di essere misurate.
-
-Successivamente avviene l'effetiva misura che consiste nell'estrarre un valore da una distribuzione normale inizzializzata come nell'equazione~\ref{eq:normal_dist_bob}.
 
 \section{Sifting}\label{se:sifting}
 Prima di procede con l'effettiva stima dei parametri \`e necessario effettua il sitfing (vaglio delle informazioni). A questo punto delle simulazione si hanno gli stati coerenti inviati e l'insieme delle misure delle componenti. Dal momento che viene effettuata la misura di una sola componente per ogni round di trasmissione, i dati trasmessi sono il doppio di quelli misurati. L'operazione che viene effettuata \`e molto semplice: per ogni misura effettuata viene determinata quale componente \`e stata misurata, questo grazie al tag di cui abbiamo parlato nella sottosezione~\ref{subse:prep-stato}; per il round di trasmissione corrispondente vengono mantenute solamente le informazione di valore medio e tag relative alla componente misurata scartando di resto.
@@ -65,7 +66,17 @@ Svolte tutte le operazioni illustrate dall'algoritmo~\ref{al:stima-param} per ot
 \section{Riconciliazione}
 A questo punto della simulazione si \`e in possesso del subset di dati non utilizzati per la stima dei parametri che andiamo a chiamare $\textbf{X}_0$ e $\textbf{Y}_0$; prima di effettuare la reconciliazione vengono prodotte, a partire da questi dati, altre due sequenze di dati correlati che chiameremo $\textbf{X}$ e $\textbf{Y}$ come illustrato nell'equazione~\ref{eq:normalizzazione}. 
 
-Poi viene prodotta la stringa $\textbf{s}$ la quale viene codificata attraverso l'algoritmo PEG (Progresive Edge Growth) per ottente la stringa $\textbf{c}$. Utilizziamo la stringa $\textbf{c}$ per modulare il segno della sequenza di dati $\textbf{Y}$ di Bob per produrre il messaggio  $\textbf{m}$ che verr\`a inviato ad Alice. Da messaggio  $\textbf{m}$ Alice estrarr\`a una messaggio fittizio  $\textbf{r}$ che le permettar\`a, attraverso l'utilizzo dell'algoritmo $\textit{sum-product}$~\ref{al:sum-prod}, di ottenere una stima della stringa di bit  $\textbf{c}$ prodotta originariamente da Bob.
+Poi viene prodotta la stringa $\textbf{s}$ la quale viene codificata attraverso l'algoritmo PEG (Progresive Edge Growth) per ottente la stringa $\textbf{c}$. Utilizziamo la stringa $\textbf{c}$ per modulare il segno della sequenza di dati $\textbf{Y}$ di Bob per produrre il messaggio  $\textbf{m}$ che verr\`a inviato ad Alice. Da messaggio  $\textbf{m}$ Alice estrarr\`a una messaggio fittizio $\textbf{r}$ con $r_i = \frac{m_i}{X_i}$ che corrisponde alla trasmisione su un canale Gaussiano con rumore di varianza $V_i = \frac{V_z}{|X_i|}$.
+
+Per tutti gli elementi del messaggio \textbf{r} vengono calcolati i valori di varianza che a loro volta vengono utilizzati per calcolare le LLRs (log-likelihood ratios) che sono definite come~\cite{gumucs2021novel}:
+\begin{equation}
+l_i = \log \frac{P(R_i = r_i| C_i = 0)}{P(R_i = r_i| C_i = 1)} = \frac{2r_i}{V_i}
+\end{equation}
+
+Le LLRs sono il logaritmo del rapporto tra la probabilit\`a condizionata che il messaggio $r_i$ provenisse effettivamente da un bit $0$ e la probabilit\'a che il messaggio $r_i$ provenisse da una bit $1$. I valori di LLRs permettono ad Alice, grazie all'utilizzo di un algoritmo LDPC di decodifica~\ref{al:sum-prod}, di ottenere una stima $\textbf{c'}$ della stringa $\textbf c$ prodotta da Bob.
+
+
+%che le permettar\`a, attraverso l'utilizzo dell'algoritmo $\textit{sum-product}$~\ref{al:sum-prod}, di ottenere una stima della stringa di bit $\textbf{c}$ prodotta originariamente da Bob.
 
 Tutte queste operazione vengono illustrate nell'algoritmo~\ref{al:recon} facendo riferimento alla sottosezione~\ref{subse:riconciliazione}.
 
@@ -90,10 +101,15 @@ Tutte queste operazione vengono illustrate nell'algoritmo~\ref{al:recon} facendo
 \end{algorithmic}
 \end{algorithm}
 
+%Per tutti gli elementi del messaggio $\underline{r}$ vengono calcolati i valori di varianza che a loro volta vengono utilizzati per calcolare la log likelihood ratios (LLRs) che sono definite come~\cite{gumucs2021novel}:
+%\begin{equation}
+%l_i = \log \frac{P(R_i = r_i| C_i = 0)}{P(R_i = r_i| C_i = 1)} = \frac{2r_i}{V_i}
+%\end{equation}
+
 
 
 \subsection{Algoritmi Sum-Product e classic PEG}\label{subse:algorithms}
-
+L'algoritmo LDPC utilizzato per la decodifica nella simulazione prende in nome di \textit{sum-product}~\ref{al:sum-prod}. Questo algoritmo utilizza la tecnica di \textit{belief propagation} per creare dei messaggi i quali vengono utilizzati per "migliorare" i valori delle log-likelihood ratios 
 
 \begin{algorithm} 
 \caption{: Sum-product decoding algorithm}\label{al:sum-prod}
