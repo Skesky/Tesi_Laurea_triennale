@@ -24,16 +24,44 @@ Per la misurazione del segnale verr\`a effettuata una misura omodina che consist
 
 Successivamente avviene l'effetiva misura che consiste nell'estrarre un valore da una distribuzione normale inizzializzata come nell'equazione~\ref{eq:normal_dist_bob}.
 
-\section{Stima dei parametri}
-La stima dei parametri \`e una fase indispensabile del protocollo perch\'e permette di determinare se la trasmissione \`e stata sicura oppure \`e avvenuta l'intromissione di una spia.
-
-\subsection{Sifting}\label{subse:sifting}
+\section{Sifting}\label{se:sifting}
 Prima di procede con l'effettiva stima dei parametri \`e necessario effettua il sitfing (vaglio delle informazioni). A questo punto delle simulazione si hanno gli stati coerenti inviati e l'insieme delle misure delle componenti. Dal momento che viene effettuata la misura di una sola componente per ogni round di trasmissione, i dati trasmessi sono il doppio di quelli misurati. L'operazione che viene effettuata \`e molto semplice: per ogni misura effettuata viene determinata quale componente \`e stata misurata, questo grazie al tag di cui abbiamo parlato nella sottosezione~\ref{subse:prep-stato}; per il round di trasmissione corrispondente vengono mantenute solamente le informazione di valore medio e tag relative alla componente misurata scartando di resto.
 
 Questa operazione viene effettata per ogni coppia di dati trasmessi e misurati.
 
+\section{Stima dei parametri}
+La stima dei parametri \`e una fase indispensabile del protocollo perch\'e permette di determinare se la trasmissione \`e stata sicura oppure \`e avvenuta l'intromissione di una spia. Per la stima dei parametri Alice e Bob dovrebbero scambiarsi un subset random dei dati trasmissi ma per semplicit\`a nella simulazione utilizziamo i primi $n$ dati trasmessi. In un'applicazione reale del protocollo questa \`e una pessima scelta, perch\'e se Eve venisse in possesso di questa informazione potrebbe non intercettare i primi $n$ segnali andando a misurare solo la restante parte. Cos\`i facendo Eve non verrebbe rilevata pur avendo intercettato la parte pi\'u importante della comunicazione, cio\`e i dati che verranno utilizzati per distillare la chiave.
+
+Chiamiamo i subset di dati dopo il sifting di Alice e Bob utilizzati per la stima dei parametri $Q_A$ e $Q_B$ per la componente di quadrature $q$ e $P_A$ e $P_B$ per la componente di quadratura $p$.
+
 \subsection{Stima mutue informazioni}
 A questo punto possiamo effettivamente andare a stimare a partire dai dati trasmessi e quelli misurari la mutua informazione fra Alice e Bob e quella tra Eve e Bob. Per fare questo utilizzaremo le formule presentate nella sottosezione~\ref{subse:stima-parametri}. 
+
+\begin{algorithm}[H]
+\caption{: Stima dei parametri}
+\begin{algorithmic}[1]
+\State \textbf{Step 1:} Stima dei parametri a, b e c \newline
+	$a \leftarrow V_{mod} + 1$ \newline
+	$b \leftarrow \frac{\langle Q_B^2 \rangle + \langle P_B^2\rangle}{2} $ \newline
+	$c \leftarrow \sqrt{\frac{V_{mod} + 2}{V_{mod}}} \cdot \frac{\langle Q_BQ_A \rangle + \langle P_BP_A\rangle}{2}$ 
+\State \textbf{Step 2:} Stima del rumore e della trasmittanza del canale \newline
+	$T \leftarrow \frac{c^2}{V_{mod}^2 + 2 V_{mod}}$ \newline
+	$\xi \leftarrow b - TV_{mod} -1 $ 
+\State \textbf{Step 3:} Calcolo dei $\nu$ \newline
+	$\textbf{$\nu$} \leftarrow nuCalc()$  		 \Comment vengono utilizzare le equazioni \ref{eq:nuCalc}
+\State \textbf{Step 4:} Calcolo $I_{AB}$ \newline
+	$SRN \leftarrow signalNoiseRatio()$	\Comment viene utilizzata l'equazione \ref{eq:snr}	
+	$I_{AB} \leftarrow mutualInfoAliceBob(SNR)$	\Comment viene utilizzata l'equazione \ref{eq:AB-info}
+\State \textbf{Step 5:} Calcolo $\chi_{EB}$ \newline
+	$\chi_{EB} \leftarrow g(\nu_1) + g(\nu_2) - g(\nu_3)$	\Comment la funzione $g(\nu)$ \ref{eq:g}						
+\State \textbf{Step 6:} Confronto tra $I_{AB}$ e $\chi_{EB}$  \newline
+	$\beta \leftarrow \frac{R}{I_{AB}}$	\Comment R rappresenta in code-rate
+	\If {$\beta I_{AB} < \chi_{EB}$}
+		\State	$abort()$		\Comment la simulazione si interrompe
+	\EndIf
+\end{algorithmic}
+\end{algorithm}
+
 
 \section{Riconciliazione}
 A questo punto della simulazione si \`e in possesso del subset di dati non utilizzati per la stima dei parametri che andiamo a chiamare $\textbf{X}_0$ e $\textbf{Y}_0$; prima di effettuare la reconciliazione vengono prodotte, a partire da questi dati, altre due sequenze di dati correlati. 
@@ -67,22 +95,80 @@ l_i = \log \frac{P(R_i = r_i| C_i = 0)}{P(R_i = r_i| C_i = 1)} = \frac{2r_i}{V_i
 
 Infine ver\`a utilizzato l'algoritmo \textit{sum-product}~\ref{subse:algorithms} di decodifica per ottenere una stima ${\underline{s}}$ della stringa $\underline s$ prodotta da Bob.
 
+
+
 \subsection{Algoritmi Sum-Product e classic PEG}\label{subse:algorithms}
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
 
 \begin{algorithm}
 \caption{: Sum-product decoding algorithm}
 \begin{algorithmic}
-\STATE pippo
+\State \textbf{Step 1: }Inizializzazione dei messaggi dei nodi variabile $L(q_{i,j})^{\langle 0 \rangle}$
+\For {$i \leftarrow 0; M$}
+	\For {$j \leftarrow 0; N$} 
+		\State $L(q_{i,j})^{\langle 0 \rangle} \leftarrow LLRs_i$
+	\EndFor
+\EndFor
+\For {$k \leftarrow 1; maxRound $}
+	\State \textbf{Step 2: } Calcola messaggi di check
+	\For {$i \leftarrow 0; N$}
+		\State $tmp \leftarrow 1$
+		\For {$j \leftarrow 0; M$}
+			\ForEach {$w \in  C_i $}
+				\If {$w \neq i$}
+					\State $tmp \leftarrow tmp * \tanh \Bigl ( \frac{1}{2}L(q_{w,j})^{\langle k-1 \rangle} \Bigr ) $
+				\EndIf
+			\EndFor
+		\State $L(r_{j,i})^{\langle k \rangle} \leftarrow 2 \tanh^{-1} (tmp)$
+		\EndFor
+	\EndFor
+	
+	\State \textbf{Step 3: }Aggiorna i messaggi dei nodi variabile 
+	\For {$i \leftarrow 0; N$}
+		\For {$j \leftarrow 0; M$}
+		\State $tmp \leftarrow 0$
+			\ForEach {$w \in  V_i $}
+				\If {$w \neq i$}
+					\State $tmp \leftarrow tmp + L(r_{w,i})^{\langle k \rangle} $
+				\EndIf
+			\EndFor
+		\State $L(q_{i,j})^{\langle k \rangle} \leftarrow LLRs_i + tmp$
+		\EndFor
+	\EndFor
+\State  \textbf{Step 4: }Aggiorna \textbf{LLRs} aggiornate
+\For {$i \leftarrow 0; \textbf{LLRs}.size()$}
+	\State $tmp \leftarrow 0$
+	\ForEach{$ j \in V_i $}
+		\State $tmp \leftarrow tmp + L(r_{i,j})^{\langle k \rangle}$
+	\EndFor
+	\State {$ L(Q_i) \leftarrow LLRs_i + tmp$}
+\EndFor
+\EndFor
+\State \textbf{Step 5: }Stima \textbf{C}
+\For {$i \leftarrow 1; \textbf{LLRs}.size()$}
+	\If {$LLRs_i \geq 0$}
+		\State$C_i \leftarrow 0$
+	\Else
+		\State$C_i \leftarrow 1$
+	\EndIf
+	
+\EndFor
+
+
+
 \end{algorithmic}
 \end{algorithm}
 
 
-\begin{algorithm}
-\caption{: Classic PEG algorithm}
-\begin{algorithmic}
-\STATE Input:  \STATE output
-\end{algorithmic}
-\end{algorithm}
+%\begin{algorithm}
+%\caption{: Classic PEG algorithm}
+%\begin{algorithmic}
+%\STATE Input:  \STATE output
+%\end{algorithmic}
+%\end{algorithm}
 
 
 

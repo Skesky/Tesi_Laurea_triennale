@@ -9,11 +9,11 @@ Il protocollo di distribuzione quantistica di chiavi a variabili continue con mo
 
 Il protocollo pu\`o essere suddiviso in due sezioni: la prima sezione ha effettivamente a che fare con segnali quantistici mentre la seconda sezione opera con segnali e dati classici. La prima sezione comprende la scelta e la trasmissione degli stati coerenti su fibra ottica da parte di Alice e termina nel momento in cui Bob effettua la misura; la seconda parte comprende il sifting, la stima dei parametri e la riconciliazione.
 
-\begin{figure}[bht] 
+\begin{figure}[H] 
 \begin{center}
-\includegraphics[width=8cm]{figure/esempio-figura-1.eps} 
+\includegraphics[width=\textwidth]{figure/alice_bob_communication.eps} 
 \end{center}
-\caption{Schema che descrive le fasi del protocollo facendo particolare attenzione al canale quantistice e canale classico.} 
+\caption{Schema di comunicazione tra Alice e Bob Sezione.} \label{fig:alice-bob-schema}
 \end{figure}
 
 \subsection{Produzione, trasmissione e ricezione del segnale quantistico}\label{subse:sottosezione2-1-1}
@@ -48,11 +48,11 @@ In caso di misura omodina \`e necessaria un'operazione addizionale cio\'e il sif
 Dopo avere terminato la fase di trasmissione, Alice e Bob rivelano una porzione random di dati in modo tale da confrontare ci\`o che \`e stato effettivamente inviato da Alice con le misure di Bob. Da questo confronto sono in grado di stimare l'informazione mutua $I_{AB}$ (informazione mutua tra Alice e Bob) e l'informazione mutua tra Eve e Bob $\chi_{EB}$. Prima della effettiva stima delle mutue informazioni e necessario stimare trasmittanza e rumore del canale e calcolare altre quantit\`a che verranno utilizzare nel calcolo delle mutue informazioni.
 
 Secondo l'articolo~\cite{https://doi.org/10.1002/qute.201800011} l'equazione per il calcolo di $I_{AB}$ \`e:
-\begin{equation}
+\begin{equation} \label{eq:AB-info}
 I_{AB} = \frac{\mu}{2}\log_2(1 + SNR)
 \end{equation}
 con $\mu = 1$ se la misura \`e omodina e $\mu = 2$ per la misura eterodina. Mentre per il calcolo dell'$SNR$ abbiamo che:
-\begin{equation}
+\begin{equation} \label{eq:snr}
 SNR = \frac{\frac{1}{\mu} T V_{mod}}{1 + \frac{1}{\mu} \xi}
 \end{equation}
 
@@ -83,7 +83,7 @@ T& = \frac{c^2}{V_{mod}^2 + 2V_{mod}} \\
 \end{equation}
 
 Ora non ci resta che calcolare le quantit\`a $\nu_1$, $\nu_2$ e $\nu_3$ alle quali verr\`a applicata una funzione $g(\nu)$ che ci porter\`a al calcolo della mutua informazione fra Eve e Bob. Possiamo calcolare i valori di $\nu$ utilizzando i parametri calcolati in precedenza in questo modo:
-\begin{equation}
+\begin{equation} \label{eq:nuCalc}
 \begin{split}
 \nu_1& = \frac{1}{2}[z + (b - a)] \\
 \nu_2& = \frac{1}{2}[z - (b - a)] \\
@@ -93,11 +93,11 @@ Ora non ci resta che calcolare le quantit\`a $\nu_1$, $\nu_2$ e $\nu_3$ alle qua
 con $z = \sqrt{(a + b)^2 - 4 c^2}$.
 
 Finalmente \`e giunto in momento di calcolare anche $\chi_{EB}$ in questo modo:
-\begin{equation}
+\begin{equation} \label{eq:EB-info}
 \chi_{EB} = g(\nu_1) + g(\nu_2) - g(\nu_3)
 \end{equation}
 con 
-\begin{equation}
+\begin{equation} \label{eq:g}
 g(\nu) = \Bigl (\frac{\nu + 1}{2}\Bigr ) \log_2 \Bigl (\frac{\nu + 1}{2}\Bigr ) - \Bigl (\frac{\nu - 1}{2}\Bigr ) \log_2 \Bigl (\frac{\nu - 1}{2}\Bigr )
 \end{equation}
 
@@ -110,9 +110,6 @@ Se la stima dei parametri ha avuto successo Alice e Bob sono in possesso di due 
 \item \textbf{diretta}: Alice produce un messaggio fittizio codificando i suoi dati (correlati a quelli di Bob) con una chiave. Bob basandosi sulle misure effettuate in fase di trasmissione cerca di estrarre la chiave dal messaggio fittizio;
 \item \textbf{inversa}: la procedura \`e la stessa della riconciliazione diretta solamente che vengono scambiate le parti, Bob produce il messaggio fittizio ed Alice cerca di estrarre la chiave.
 \end{itemize} 
-
-i dati di Alice sono i dati primari e Bob corregge i suoi dati di conseguenza.
-in questo caso sono i dati di Bob ad essere primari, vengono inviati ad Alice la quale li utilizza per correggere i propri dati.
  
 La riconciliazione diretta presenta un problema: non pu\`o essere utilizzata per valori di trasmittanza troppo bassi, questo perch\'e Eve avrebbe pi\'u informazione sui dati di Alice rispetto a Bob e quindi risulterebbe impossibile creare una chiave crittografica sicura. D'altro canto la riconciliazione inversa non presenta questo problema quindi \`e possibile utilizzarla anche con valori bassi di trasmittanza, per\`o \`e da tenere in considerazione che pi\`u bassa \`e la trasmittanza pi\`u sar\`a distruttivo l'effetto del rumore del canale~\cite{https://doi.org/10.1002/qute.201800011}.
 
@@ -177,25 +174,25 @@ Questo protocollo \`e particolarmente sicuro perch\'e consente il rilevamento di
 Gli attacchi presi in considerazione tipicamente sono tre e differiscono per la loro efficacia:
 \begin{itemize}
 \item \textbf{attacchi individuali}: Eve effettua operazioni singolarmente su ogni segnale che viene scambiato tra Alice e Bob. 
-\begin{figure}[tbp] 
+\begin{figure}[H] 
 \begin{center}
 \includegraphics[width=0.8\textwidth]{figure/individual_attack.eps} 
 \end{center}
-\caption{Schema di comunicazione tra Alice e Bob Sezione~\ref{se:prima-sezione}.} \label{fig:figura-doppia}
+\caption{Schema attacco individuale.} \label{fig:attacco-individuale}
 \end{figure}
 \item \textbf{attacchi collettivi}: Eve salva nella memoria del suo computer quantistico un certo numero di stati sui quali effettua una misura collettiva. Questo attacco \`e pi\`u potente del precedente perch\`e secondo i pricipi della fisica quantistica effettuando una misura collettiva si pu\`o potenzialmente ricavare pi\`u informazione che dalla misura del singolo stato.
-\begin{figure}[tbp] 
+\begin{figure}[H] 
 \begin{center}
 \includegraphics[width=0.8\textwidth]{figure/collective_attack.eps} 
 \end{center}
-\caption{Schema di comunicazione tra Alice e Bob Sezione~\ref{se:prima-sezione}.} \label{fig:figura-doppia}
+\caption{Schema attacco collettivo.} \label{fig:attacco-collettivo}
 \end{figure}
 \item \textbf{attacchi coerenti}: sono attacchi pi\`u potenti dei collettivi perché Eve, oltre alla lettura collettiva, può utilizzare delle correlazioni quantistiche, cioé entanglement, per mettere in relazione gli stati di pi\`u run.
-\begin{figure}[tbp] 
+\begin{figure}[H] 
 \begin{center}
 \includegraphics[width=0.8\textwidth]{figure/collective_attack.eps} 
 \end{center}
-\caption{Schema di comunicazione tra Alice e Bob Sezione~\ref{se:prima-sezione}.} \label{fig:figura-doppia}
+\caption{Schema attacco coerente.} \label{fig:attacco-coerente}
 \end{figure}
 \end{itemize} 
 
@@ -209,10 +206,10 @@ In entrambi i casi, un attacco da parte di Eve non va a far altro che aumentare 
 
 Tutte queste alterazioni, in fase di stima dei parametri, produrranno dei valori indesiderati come $\chi_{EB} > I_{AB}$. Questa incongruenza tra le stime e ci\`o che ci si aspettava dalla scelta dei paramettri iniziali portano a pensare che una spia si sia intromessa nella comunicazione. 
 
-\begin{figure}[h] 
+\begin{figure}[bht] 
 \begin{center}
-\includegraphics[width=\textwidth]{figure/alice_bob_communication.eps} 
+\includegraphics[width=8cm]{figure/esempio-figura-1.eps} 
 \end{center}
-\caption{Schema di comunicazione tra Alice e Bob Sezione~\ref{se:prima-sezione}.} \label{fig:figura-doppia}
+\caption{Schema che descrive le fasi del protocollo facendo particolare attenzione al canale quantistice e canale classico.} 
 \end{figure}
 
