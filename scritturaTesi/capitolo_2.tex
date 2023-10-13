@@ -1,6 +1,13 @@
-La QKD (Quantum Key distribution), o Distribuzione Quantistica delle Chiavi, \`e una tecnologia di crittografia quantistica che permette la distribuzione di chiavi crittografiche con un livello di sicurezza inattacabile anche da computer quantistici. La QKD pu\`o essere suddivisa in due macro-classi DV-QKD e CV-QKD. Nella DV-QKD (Discrete-Variable Quantum Key Distribution) le informazioni vengono trasmesse utilizzando stati quantistici discreti, ad esempio la polarizzazione dei fotoni, che viene misurata attraverso apposite apparecchiature per ogni fotone; al contrario nella CV-QKD (Continous-Variable Quantum Key Distribution) vengono utilizzate variabili continue delle onde elettromagnatiche come ad esempio la fase.
+La QKD (Quantum Key distribution), o Distribuzione Quantistica delle Chiavi, \`e una tecnologia di crittografia quantistica che permette la distribuzione di chiavi crittografiche con un livello di sicurezza inattacabile anche da computer quantistici. La QKD pu\`o essere suddivisa in due macro-classi DV-QKD e CV-QKD. Nella DV-QKD (Discrete-Variable Quantum Key Distribution) le informazioni vengono trasmesse utilizzando stati quantistici discreti, ad esempio la polarizzazione dei fotoni, che viene misurata attraverso apposite apparecchiature per ogni fotone. 
 
-La sicurezza \'e garantita dai princ\'ipi delle fisica quantistica che ci permettono di rilevare eventuali intercettazioni da parte di Eve (spia) nella trasmissione su canale quantistico tra Alice (mittente) e Bob (destinatario).
+Il primo esempio di protocollo DV-QKD, come accennato nell'introduzione, \`e il BB84. In questo protocollo Alice trasmette sul canale quantistico a Bob una sequenza di fotoni polarizzati in modo casuale in due basi, ognuna delle quali ha due gradi di polarizzazione. Nella prima base il fotone pu\`o essere polarizzato a 0 o 90 gradi e verr\`a considerato come un bit 0, mentre nella seconda a 45 o 135 gradi e verr\`a considerato come bit 1.
+In ricezione Bob effettuer\`a la misura della polarizzazione del fotone scegliendo una base con probabilit\`a uniforme dalle due basi disponibili. Alla fine della trasmissione Bob sar\`a in possesso dei gradi di polarizzazione misurati i quali verranno convertiti in 0 e 1 seguendo la stessa convenzione di Alice. Da notare che parte dei dati di Bob differir\`a da quelli inviati da Alice perch\`e Bob ha effettuato la misura utilizzando la base sbagliata.
+Successivamente Bob comunicher\`a ad Alice quale base ha utilizzato per la misura di ogni fotone ed Alice scarter\`a tutti quei fotoni la cui base di trasmissione e misura non combaciano, e lo comunicher\`a a Bob. Fatto ci\`o Alice e Bob saranno in possesso, almeno in teoria, della stessa stringa random di bit.
+Quello che potrebbe succedere \`e che durante la trasmissione Eve intercetti i fotoni inviati da Alice per effettuarne una misura e poi inviare il risultato della propria misura a Bob. Tuttavia questo altererebbe il risultato della misura di Bob perch\`e Eve non pu\`o sapere con quale base \`e stato polarizzato il fotone, e di conseguenza non pu\`o sapere con quale base misurarlo. Misurando un fotone con la base sbagliata nel momento in cui lo ritrasmetter\`a a Bob, egli ricever\`a un fotone polarizzato in modo differente rispetto a quello inviato da Alice. Questo permetter\`a ad Alice e Bob di determinare la presenza di una spia andando a confrontare una porzione di bit misurati con la stessa base utilizzata in trasmissione e quindi ritenuti uguali. Durante il confronto se si riscontrano bit diversi si determina la presenza di una spia. Se Eve ha intercettatto troppi fotoni non viene prodotta nessuna chiave e si ricomincia il protocollo da capo, in caso contrario si utilizzano i bit rimasti segreti come chiave crittografica\cite{zhao_development_2018}.
+
+Nella CV-QKD (Continous-Variable Quantum Key Distribution), a differenza della DV-QKD per la trasmissione di informazioni vengono utilizzate variabili continue delle onde elettromagnatiche come ad esempio la fase.
+
+In entrambe le classi di protocolli la sicurezza \'e garantita dai princ\'ipi delle fisica quantistica che ci permettono di rilevare eventuali intercettazioni da parte di Eve (spia) nella trasmissione su canale quantistico tra Alice (mittente) e Bob (destinatario).
 
 La rilevazione \`e dovuta al fatto che durante la misura da parte di Eve lo stato quantistico viene alterato facendo diminuire l'energia del segnale se questo non viene amplificato~\footnote{Un'amplificazione, pur riportando il livello di energia del segnale a quello iniziale, introdurr\`a ulteriore rumore.} e introducendo del rumore, quindi dell'incertezza. All'atto pratico Eve intercetta lo stato coerente, rappresentato come in figura~\ref{fig:stato-coerente}, ne effettua una misura per poi ritrasmetterlo sul canale. Bob ricever\`a uno stato coerente con del rumore aggiunto e un minor numero di fotoni, ci\`o comporta che la gaussiana che lo rappresenta sar\`a caratterizzata da una varianza superiore a quella stimata e un valor medio pi\`u vicino allo zero. Per questo motivo, si effettuano numerosi run di trasmissione quantistica. In una fase preliminare si utilizza un certo numero di run per stimare i parametri di rumore del canale e, da essi, decidere se la trasmissione sta avvenendo in modo sicuro oppure no (si veda Sez.~\ref{subse:stima-parametri}). Nel caso in cui il controllo non vada a buon fine, la trasmissione corrente viene abortita perch\'e non \`e possibile garantire la sicurezza della chiave crittografica e si comincia con un nuovo round, se invece il controllo va a buon fine, il protocollo assicura che un'eventuale spia Eve non possa ottenere sufficiente informazioni sulla chiave condivisa fra Alice e Bob.
 
@@ -30,20 +37,20 @@ Per dare una rappresentazione matematica di quello che avviene ad uno stato coer
 %\end{split}
 %\end{equation}
 %In ricezione, a causa del canale, Bob andr\`a ad effettuare la misura su uno stato coerente alterato $|\alpha_B \rangle = | q_B + i p_B\rangle$ dove le componenti di quadratura rispondono alle seguenti distribuzioni gaussiane:
-Bob andrà ad efettuare una misura su uno stato non più coerente, a causa della presenza di rumore ambientale. Tuttavia, lo stato quantistico ricevuto da Bob può ancora essere rappresentato utilizzando i valori medi di $\hat q$ e $\hat p$ e le loro varianze. Per lo stato ricevuto da Bob queste quantità prendono i seguenti valori:
+Bob andrà ad effettuare una misura su uno stato non più coerente, a causa della presenza di rumore ambientale. Tuttavia, lo stato quantistico ricevuto da Bob può ancora essere rappresentato utilizzando i valori medi di $\hat q$ e $\hat p$ e le loro varianze. Per lo stato ricevuto da Bob queste quantità prendono i seguenti valori:
 \begin{equation}\label{eq:stato-bob}
 \begin{split}
-q_B = \sqrt{T} q_A \\
-p_B = \sqrt{T} p_A \\
-Var(q_B) = 1 + \xi \\
-Var(p_B) = 1 + \xi
+q_B = Mean(\hat{q}_B) = \sqrt{T} q_A, \quad Var(\hat{q}_B) &= 1 + \xi \\
+p_B = Mean(\hat{p}_B) = \sqrt{T} p_A, \quad Var(\hat{p}_B) &= 1 + \xi 
+%Var(q_B) &= 1 + \xi \\
+%Var(p_B) &= 1 + \xi
 \end{split}
 \end{equation}
 Pertanto, a tutti gli effetti, il canale ha come risultato quello di attenuare i valori medi e aumentare la varianza delle componenti di quadratura. 
 
 Per la misura dello stato possono essere adottati due metodi diversi:
 \begin{itemize}
-\item \textbf{misura omodina}: Bob decide se misurare la componente di quadratura $q$ o $p$; la decisione viene presa attraverso una distribuzione di probabilit\`a uniforme.
+\item \textbf{misura omodina}: Bob decide se misurare la componente di quadratura $q$ o $p$; la decisione viene presa attraverso una distribuzione di probabilit\`a uniforme. Per ciascuna componente di quadratura i valori misurati seguono le seguenti distribuzioni gaussiane:
 \begin{equation}
 \begin{split}
 Q_B \sim \mathcal N(\sqrt{T}q_A, 1 + \xi) \\
@@ -51,7 +58,7 @@ P_B \sim \mathcal N(\sqrt{T}p_A, 1 + \xi)
 \end{split}
 \end{equation}
 Per rimarcare quanto appenda detto, solo una delle due componenti verr\`a misurata.
-\item \textbf{misura eterodina}: questa misura permette di misurare entrambe le componenti contemporaneamente, per\`o c'\`e un prezzo da pagare perch\'e effettuando questa misura viene aggiunto del rumore e la varianza delle distribuzioni normali ha un incremento di $1$.
+\item \textbf{misura eterodina}: questa misura permette di misurare entrambe le componenti contemporaneamente, per\`o c'\`e un prezzo da pagare perch\'e effettuando questa misura viene aggiunto del rumore e la varianza delle distribuzioni normali ha un incremento di $1$. Anche i questo caso i valori misurati di entrambe le componenti seguono le seguenti distribuzioni di probabilit\`a gaussiane:
 \begin{equation}
 \begin{split}
 Q_B \sim \mathcal N(\sqrt{T}q_A, 2 + \xi) \\
@@ -59,7 +66,7 @@ P_B \sim \mathcal N(\sqrt{T}p_A, 2 + \xi)
 \end{split}
 \end{equation}
 \end{itemize}  
-
+Le due procedure differiscono nella scelta di quali sono i dati primari: nella riconciliazione diretta i dati di Alice sono i dati primari e Bob corregge i suoi dati di conseguenza, mentre nella riconciliazione inversa sono i dati di Bob ad essere primari, vengono inviati ad Alice la quale li utilizza per correggere i propri dati. 
 In caso di misura omodina \`e necessaria un'operazione addizionale cio\'e il sifting. Infatti, a questo punto del protocollo Alice \`e in posseso del doppio dei dati di Bob (in quanto Bob misura solo una della due componenti per ogni round) e per far s\`i che abbiano la stessa quantit\`a di dati correlati Bob rivela ad Alice, su canale classico pubblico, quale componente ha misurato ad ogni round; Alice prende nota della componenti misurate e scarta le altre\cite{milicevic_key_2018}. Notare che questa operazione non compromette la sicurezza: Eve saprà solo quale tipo di misura ha eseguito Bob ad ogni round, ma non il risultato ottenuto né il valore  vero inviato da Alice.
 
 \subsection{Stima dei parametri}\label{subse:stima-parametri}
@@ -74,12 +81,12 @@ con $\mu = 1$ se la misura \`e omodina e $\mu = 2$ per la misura eterodina. Qui 
 SNR = \frac{\frac{1}{\mu} T V_{mod}}{1 + \frac{1}{\mu} \xi}
 \end{equation}
 
-Per la stima di rumore e trasmittanza del canale abbiamo bisogno dei parametri $a$, $b$ e $c$ che rappresentano le entry della matrice di covarianza $\Sigma_{AB}$. Tale matrice rappresenta la covarianza fra le quadrature $\hat q$ $\hat p$ per lo stato quantistico di Bob.
+Per la stima di rumore e trasmittanza del canale abbiamo bisogno dei parametri $a$, $b$ e $c$ che rappresentano le entry della matrice di covarianza $\Sigma_{AB}$. Tale matrice rappresenta la covarianza fra le quadrature $\hat q$ e $\hat p$ per lo stato quantistico e deve essere stimata a partire dai risultati delle misure di Bob.
 \begin{equation}
 \Sigma_{AB} =
 \begin{pmatrix}
-a \mathbbm{1}_2 & c \mathbbm{1}_2 \\
-c \mathbbm{1}_2 & b \mathbbm{1}_2
+a \mathbb{1}_2 & c \mathbb{1}_2 \\
+c \mathbb{1}_2 & b \mathbb{1}_2
 \end{pmatrix}
 \end{equation}
 
@@ -100,11 +107,12 @@ T& = \frac{c^2}{V_{mod}^2 + 2V_{mod}} \\
 \end{split}
 \end{equation}
 
-Ora non ci resta che calcolare le quantit\`a $\nu_1$, $\nu_2$ e $\nu_3$ alle quali verr\`a applicata una funzione $g(\nu)$ che ci porter\`a al calcolo della mutua informazione fra Eve e Bob. Finalmente \`e giunto in momento di calcolare anche $\chi_{EB}$ in questo modo:
+Ora non ci resta che calcolare $\chi_{EB}$ in questo modo:
+%Ora non ci resta che calcolare le quantit\`a $\nu_1$, $\nu_2$ e $\nu_3$ alle quali verr\`a applicata una funzione $g(\nu)$ che ci porter\`a al calcolo della mutua informazione fra Eve e Bob. Finalmente \`e giunto in momento di calcolare anche $\chi_{EB}$ in questo modo:
 \begin{equation} \label{eq:EB-info}
 \chi_{EB} = g(\nu_1) + g(\nu_2) - g(\nu_3)
 \end{equation}
-utilizzando in validi di $\nu$:
+Per fare questo avremo bisogno dei valori delle quantit\`a $\nu_1$, $\nu_2$ e $\nu_3$ che possiamo calcolare come segue:
 \begin{equation} \label{eq:nuCalc}
 \begin{split}
 \nu_1& = \frac{1}{2}[z + (b - a)] \\
@@ -113,11 +121,11 @@ utilizzando in validi di $\nu$:
 \end{split}
 \end{equation}
 con $z = \sqrt{(a + b)^2 - 4 c^2}$.
-La funzione $g(\nu)$ per il calcolo di $\chi_{EB}$ \`e definita in questo modo:
+
+La funzione $g(\nu)$ per il calcolo di della mutua informazione fra Eve e Bob \`e definita in questo modo:
 \begin{equation} \label{eq:g}
 g(\nu) = \Bigl (\frac{\nu + 1}{2}\Bigr ) \log_2 \Bigl (\frac{\nu + 1}{2}\Bigr ) - \Bigl (\frac{\nu - 1}{2}\Bigr ) \log_2 \Bigl (\frac{\nu - 1}{2}\Bigr )
 \end{equation}
-
 
 Infine, dopo aver calcolato l'informazione mutua tra Alice e Bob e quella tra Eve e Bob vengono confrontati i risultati e nel caso in cui $\chi_{EB}$ risulti essere maggiore di $\beta I_{AB}$ \footnote{$\beta$ rappresenta l'accuratezza nel processare i dati dopo la trasmissione e viene calcolata come il rapporto tra il code-rate del codice classico scelto e la mutua informazione tra Alice e Bob} il protocollo viene abortito.
 
@@ -157,10 +165,16 @@ Dopodich\'e vengono utilizzati dei codici LDPC~\cite{borwankar_low_nodate} che r
 \begin{itemize}
 \item come una matrice di dimensioni $M \times N$ dove $N$ rappresenta la dimensione del messaggio che si vuole codificare ed $M = N - k$, con $k$ ottenuto dal prodotto tra $N$ e il code-rate, corrisponde al numero di bit ridondanti nel messaggio codificato, che vengono utilizzati per la correzione degli errori. Questa matrice \`e prevalentemente composta da zeri e contiene un numero limitato di uno.
 \item come una grafo bipartito rappresentato da nodi check e nodi variabile; facendo riferimento alla rappresentazione matriciale il numero di nodi check \`e $M$ (numero di righe della matrice) e quello di nodi variabile \`e $N$ (numero di colonne della matrice). Gli uno contenuti nella matrice, nel grafo, sono denotati dagli archi che collegano un nodo variabile ad un nodo check.
+\begin{figure}[H] 
+\begin{center}
+\includegraphics[width=0.8\textwidth]{figure/tanner_graph.eps} 
+\end{center}
+\caption[Grafo bipartito]{Grafo bipartito che rappresenta la matrice di parit\`a, in questo particolara caso fa riferimento alla matrice H \ref{eq:h-matrix} sottostante.}
+\end{figure}
 \end{itemize}
 
 Attraverso gli algoritmi LDPC viene calcolata una matrice \textbf{H} che sar\`a della forma $\bigl [ -P^T_{(M \times k)} | I_{N-k}\bigr ]$:
-\begin{equation}
+\begin{equation} \label{eq:h-matrix}
 \textbf{H} =
 \begin{pmatrix}
  1 & 1 & 1 & 1 & 0 & 0 \\
@@ -203,22 +217,22 @@ Gli attacchi presi in considerazione tipicamente sono tre e differiscono per la 
 \begin{center}
 \includegraphics[width=0.8\textwidth]{figure/individual_attack.eps} 
 \end{center}
-\caption{Schema attacco individuale.} \label{fig:attacco-individuale}
+\caption[Schema attacco individuale]{Schema che descrive un attacco individuale ponendo attenzione nel mostrare che le operazioni da parte di Eve vengono svolte singolarmente su ogni segnale.} \label{fig:attacco-individuale}
 \end{figure}
 \item \textbf{attacchi collettivi}: Eve salva nella memoria del suo computer quantistico un certo numero di stati sui quali effettua una misura collettiva. Questo attacco \`e pi\`u potente del precedente perch\`e secondo i pricipi della fisica quantistica effettuando una misura collettiva si pu\`o potenzialmente ricavare pi\`u informazione che dalla misura del singolo stato.
 \begin{figure}[H] 
 \begin{center}
 \includegraphics[width=0.8\textwidth]{figure/collective_attack.eps} 
 \end{center}
-\caption{Schema attacco collettivo.} \label{fig:attacco-collettivo}
+\caption[Schema attacco collettivo]{Schema che descrive un attatto collettivo mostrando che Eve effettua operazione su pi\`u segnali contemporaneamente.} \label{fig:attacco-collettivo}
 \end{figure}
 \item \textbf{attacchi coerenti}: sono attacchi pi\`u potenti dei collettivi perché Eve, oltre alla lettura collettiva, può utilizzare delle correlazioni quantistiche, cioé entanglement, per mettere in relazione gli stati di pi\`u run.
-\begin{figure}[H] 
-\begin{center}
-\includegraphics[width=0.8\textwidth]{figure/collective_attack.eps} 
-\end{center}
-\caption{Schema attacco coerente.} \label{fig:attacco-coerente}
-\end{figure}
+%\begin{figure}[H] 
+%\begin{center}
+%\includegraphics[width=0.8\textwidth]{figure/collective_attack.eps} 
+%\end{center}
+%\caption[Schema attacco coerente]{Schema che descrive un attacco coerente mostrando come Eve, oltre alla misura collettiva pu\`o ottenere informazioni dalle correlazione tra pi\`u stati.} \label{fig:attacco-coerente}
+%\end{figure}
 \end{itemize} 
 
 Tornando al motivo per cui effettivamente si riesce a rilevare Eve possiamo, anche questa volta, dare il merito ai principi della fisica quantistica. Questo perch\`e in caso di misura da parte di Eve lo stato coerente trasmesso verr\`a alterato. Due esempi di attacchi che Eve pu\`o mettere in atto e le loro conseguenze sono: 
@@ -231,10 +245,10 @@ In entrambi i casi, un attacco da parte di Eve non va a far altro che aumentare 
 
 Tutte queste alterazioni, in fase di stima dei parametri, produrranno dei valori indesiderati come $\chi_{EB} > I_{AB}$. Questa incongruenza tra le stime e ci\`o che ci si aspettava dalla scelta dei paramettri iniziali portano a concludere che una spia si sia intromessa nella comunicazione. 
 
-\begin{figure}[bht] 
-\begin{center}
-\includegraphics[width=8cm]{figure/esempio-figura-1.eps} 
-\end{center}
-\caption{Schema che descrive le fasi del protocollo facendo particolare attenzione al canale quantistiche e canale classico.} 
-\end{figure}
+%\begin{figure}[bht] 
+%\begin{center}
+%\includegraphics[width=8cm]{figure/esempio-figura-1.eps} 
+%\end{center}
+%\caption{Schema che descrive le fasi del protocollo facendo particolare attenzione al canale quantistiche e canale classico.} 
+%\end{figure}
 

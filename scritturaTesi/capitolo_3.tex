@@ -50,7 +50,7 @@ Svolte tutte le operazioni illustrate dall'algoritmo~\ref{al:stima-param} per ot
 \State \textbf{Step 3:} Calcolo dei $\nu$ \newline
 	$\textbf{$\nu$} \leftarrow nuCalc()$  		 \Comment vengono utilizzare le equazioni \ref{eq:nuCalc}
 \State \textbf{Step 4:} Calcolo $I_{AB}$ \newline
-	$SRN \leftarrow signalNoiseRatio()$	\Comment viene utilizzata l'equazione \ref{eq:snr}	
+	$SNR \leftarrow signalNoiseRatio()$	\Comment viene utilizzata l'equazione \ref{eq:snr}	
 	$I_{AB} \leftarrow mutualInfoAliceBob(SNR)$	\Comment viene utilizzata l'equazione \ref{eq:AB-info}
 \State \textbf{Step 5:} Calcolo $\chi_{EB}$ \newline
 	$\chi_{EB} \leftarrow g(\nu_1) + g(\nu_2) - g(\nu_3)$	\Comment la funzione $g(\nu)$ \ref{eq:g}						
@@ -80,7 +80,7 @@ Le LLRs sono il logaritmo del rapporto tra la probabilit\`a condizionata che il 
 
 Tutte queste operazione vengono illustrate nell'algoritmo~\ref{al:recon} facendo riferimento alla sottosezione~\ref{subse:riconciliazione}.
 
-\begin{algorithm}[H]
+\begin{algorithm}[t]
 \caption{: Riconciliazione}\label{al:recon}
 \begin{algorithmic}[1]
 \State \textbf{Step 1:} Genera string di bit random
@@ -109,7 +109,31 @@ Tutte queste operazione vengono illustrate nell'algoritmo~\ref{al:recon} facendo
 
 
 \subsection{Algoritmi Sum-Product e classic PEG}\label{subse:algorithms}
-L'algoritmo LDPC utilizzato per la decodifica nella simulazione prende in nome di \textit{sum-product}~\ref{al:sum-prod}. Questo algoritmo utilizza la tecnica di \textit{belief propagation} per creare dei messaggi i quali vengono utilizzati per "migliorare" i valori delle log-likelihood ratios 
+L'algoritmo LDPC utilizzato per la decodifica nella simulazione prende in nome di \textit{sum-product}~\ref{al:sum-prod}. Questo algoritmo utilizza la tecnica di \textit{belief propagation} per creando per i nodi check e i nodi variabile dei messaggi. Questi messaggi vengono aggiornati ad ogni iterazione dell'algoritmo e permettono, a loro volta, di aggiornale i valori delle LLRs.
+
+Per quanto riguarda la codifica abbiamo utilizzato l'algoritmo \textit{classic-peg}, il quale realizza la matrice di parit\`a rappresentata come un grafo partendo dalla dimensione della matrice che si vuole ottenere e da quantit\`a $\Lambda$ che rappresentano le frazioni dei nodi variabile che avranno un certo grado. \`E possibile calcolare le componenti del vettore $\Lambda$ in questo modo:
+\begin{equation}
+\Lambda_i = \frac{r_i}{\sum_i r_i}
+\end{equation}
+dove $r_i$ vengono calcolati come segue:
+\begin{equation}
+r_i = \frac{\lambda_i}{i}
+\end{equation}
+a partire da delle quantit\`a $\lambda$ che prendono in nome di node degree distribution e rappresentano la frazione di archi collegati ad una nodo di grado $d$.
+
+Tutti i valori del vettore $\lambda$, i gradi dei nodi da utilizzare e l'espressione per il calcolo del vettore $\Lambda$ fanno riferimento ai risultati ottenuti nell'articolo \cite{e24101463} in merito al code-rate ed al valore di SNR da noi scelto.
+
+Come abbiamo detto l'algoritmo \textit{classic-peg} prende input la dimensione della matrice di parit\`a e quindi il numero di nodi check e nodi variabile del grafo oltre che la frazione di nodi di un certo grado.
+
+L'algoritmo \textit{classic-peg} genera il grafo, partendo dai parametri in input, iterando su tutti i nodi variabile ed aggiungendo archi che collegano il nodo variabile ai nodi check. Si passa al nodo variabile successivo solamente quando tutti gli archi richiesti per quel nodo sono stati creati. Per la creazione di un nuovo arco ci sono due scelte possibili:
+\begin{itemize}
+\item il nodo variabile corrente non presenta ancora nessun arco, in questo caso viene creato un arco che lo collega al nodo check con minor numero di archi tra tutti i nodi check disponibili;
+\item il nodo variabile corrente presenta gi\`a altri archi, in questo caso si hanno due scenari:
+\begin{itemize}
+\item ci sono dei nodi che non appartengono al sottografo del nodo variabile corrente. Viene creato un arco tra il nodo variabile corrente ed il nodo check con meno archi che non appartiene al sottografo;
+\item il sottografo del nodo corrente copre tutti i nodi del grafo. In questo caso si sceglie il nodo check pi\`u lontano dall'attuale nodo variabile.
+\end{itemize}
+\end{itemize}
 
 \begin{algorithm} 
 \caption{: Sum-product decoding algorithm}\label{al:sum-prod}

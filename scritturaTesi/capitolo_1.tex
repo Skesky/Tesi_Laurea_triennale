@@ -16,13 +16,13 @@ Come detto precedentemente, gli stati coerenti si presentano come una distribuzi
 \begin{center}
 \includegraphics[scale=0.4]{figure/stato_coerente.eps}
 \end{center}
-\caption{Questa figura \`e una gaussiana vista dall'alto che viene ottenuta simulando molte volte la produzione dello stesso stato coerente e la misura della grandezza $\hat q$ o $\hat p$. La gaussiana \`e rappresentata su un piano cartesiano riportante sulle ascisse le misure della componente $q$ mentre sulle ordinate le misure della componente $p$} \label{fig:stato-coerente}
+\caption[stato-coerente]{Questa figura \`e una gaussiana vista dall'alto che viene ottenuta simulando molte volte la produzione dello stesso stato coerente e la misura della grandezza $\hat q$ o $\hat p$. La gaussiana \`e rappresentata su un piano cartesiano riportante sulle ascisse le misure della componente $q$ mentre sulle ordinate le misure della componente $p$} \label{fig:stato-coerente}
 \end{figure}
 
 \section{Misurazione dei segnali e incertezza quantistica}
 Partendo dal caso ideale, in cui il canale di comunicazione \`e perfetto e quindi non aggiunge rumore durante la trasmissione, Bob ricever\`a uno stato coerente con la forma vista in figura \ref{fig:stato-coerente} e proverà a misurarlo, con una data incertezza. Da notare che l'incertezza della misura \`e presente anche nel caso di un canale di comunicazione ideale, questo perch\'e non \`e dovuta solamente al rumore esterno, come ci si aspetterebbe in un canale di comunicazione classico, ma \`e una caratteristica intriseca di uno stato quantistico la quale non pu\`o essere rimossa in base al principio di indeterminazione di Heisenberg. Questa incertezza si presenta proprio in fase di misura, perch\'e come detto nella sezione~\ref{se:sezione1-1}, il valore di quadratura $q$ e $p$ sono solamente valori medi mentre il valore $Q$ o $P$ che otteniamo da una misura \ref{subse:sottosezione2-1-1} si comportano come variabili aleatorie con distribuzione di probabilit\`a gaussiana. 
 
-In un trasmissione reale, l'aggiunta di rumore esterno \`e inevitabile e in questo rumore \`e presente anche quello prodotto da un eventuale spia (Eve) che tenta anch'essa di misurare il segnale modificandolo, questo rende la misura di Bob ancora pi\`u incerta. 
+In un trasmissione reale, l'aggiunta di rumore esterno \`e inevitabile e in questo rumore \`e presente anche quello prodotto da un eventuale spia (Eve) che tenta anch'essa di misurare il segnale modificandolo, questo rende la misura di Bob ancora pi\`u incerta come possiamo notare nella figura~\ref{fig:eve-bob}. 
 
 Per concludere possiamo dire che i protocolli di QKD utlizzano due fondamentali caratteristiche dei segnali quantistici:
 \begin{itemize}
@@ -36,10 +36,10 @@ Tali proprietà risultano cruciali per determinare l'eventuale intromissione di 
 \begin{figure}[tbp] 
 \begin{center}
 \begin{tabular}{c @{\hspace{1em}} c}
-\includegraphics[width=8cm]{figure/esempio-figura-1.eps} &
-\includegraphics[width=5.5cm]{figure/esempio-figura-2.eps} \\
+\includegraphics[width=7cm]{figure/stato-bob.eps} &
+\includegraphics[width=7cm]{figure/stato-eve.eps} \\
  (a) & (b)
 \end{tabular}
 \end{center}
-\caption{Figura da inserire---> confronto tra gaussiano con spia e senza spia} \label{fig:bob-misura}
+\caption[Confronto stato con spia e senza]{Esempio di rappresentazione dello stesso stato: (a) lo stato non \`e stato alterato da Eve; (b) Eve ha misurato lo stato per poi re-inviarlo a Bob  } \label{fig:eve-bob}
 \end{figure}

@@ -1,5 +1,5 @@
  # aggiorna questo nome con il nome del file .tex che contiene la tua tesi
-finalname = esempioTesi
+finalname = elaboratoFinale
 
 # lista qui di seguito tutti i file aggiuntivi .tex (se ci sono) che compongono 
 # la tua tesi (tipicamente sono quelli importati con il comando \input{miofile} dentro
