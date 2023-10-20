@@ -9,7 +9,7 @@ Prima di addentranci nella descrizione delle fasi della simulazione, \`e bene an
 \section{Preparazione, trasmissione e misura}
 
 \subsection{Preparazione dello stato coerente}\label{subse:prep-stato}
-Per la realizzazione degli stati coerenti da trasmettere sul canale vengono scelti due valori che rappresentano i valori medi delle due gaussiane con varianza unitaria che caratterizzano lo stato. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratata in zero e con varianza $V_{mod}$. Queste informazioni sono salvate in una struttura dati che, oltre a contenere tutte le informazioni necessarie per caratterizzare lo stato coerente, presenta dei tag che verranno utilizzati nella sottosezione~\ref{subse:sifting} per distinguere le componenti di quadratura $p$ e $q$.
+Per la realizzazione degli stati coerenti da trasmettere sul canale vengono scelti due valori che rappresentano i valori medi delle due gaussiane con varianza unitaria che caratterizzano lo stato. I valori vengono estratti a loro volta da una distribuzione di probabilit\`a normale centratata in zero e con varianza $V_{mod}$. Queste informazioni sono salvate in una struttura dati che, oltre a contenere tutte le informazioni necessarie per caratterizzare lo stato coerente, presenta dei tag che verranno utilizzati nella sottosezione~\ref{se:sifting} per distinguere le componenti di quadratura $p$ e $q$.
 
 \subsection{Trasmissione su canale rumoroso}
 Per ogni stato coerente prodotto si simula la trasmissione in un canale rumoroso. Le operazioni che vengono effettuate in pratica sono: il prodotto dei valori medi della gaussiane per la radice quadrata della trasmittanza e la somma di $\xi$ alla varianza. Quindi le le componenti di quadratura saranno descritte come nell'espressione~\ref{eq:stato-bob}.
@@ -66,7 +66,7 @@ Svolte tutte le operazioni illustrate dall'algoritmo~\ref{al:stima-param} per ot
 \section{Riconciliazione}
 A questo punto della simulazione si \`e in possesso del subset di dati non utilizzati per la stima dei parametri che andiamo a chiamare $\textbf{X}_0$ e $\textbf{Y}_0$; prima di effettuare la reconciliazione vengono prodotte, a partire da questi dati, altre due sequenze di dati correlati che chiameremo $\textbf{X}$ e $\textbf{Y}$ come illustrato nell'equazione~\ref{eq:normalizzazione}. 
 
-Poi viene prodotta la stringa $\textbf{s}$ la quale viene codificata attraverso l'algoritmo PEG (Progressive Edge Growth) per ottente la stringa $\textbf{c}$. Utilizziamo la stringa $\textbf{c}$ per modulare il segno della sequenza di dati $\textbf{Y}$ di Bob per produrre il messaggio  $\textbf{m}$ che verr\`a inviato ad Alice. Da messaggio  $\textbf{m}$ Alice estrarr\`a un messaggio fittizio $\textbf{r}$ con $r_i = \frac{m_i}{X_i}$ che corrisponde alla trasmisione su un canale Gaussiano con rumore di varianza $V_i = \frac{V_z}{|X_i|}$.
+Poi viene prodotta la stringa $\textbf{s}$ la quale viene codificata attraverso l'algoritmo PEG (Progressive Edge Growth) per ottente la stringa $\textbf{c}$. Utilizziamo la stringa $\textbf{c}$ per modulare il segno della sequenza di dati $\textbf{Y}$ di Bob per produrre il messaggio  $\textbf{m}$ che verr\`a inviato ad Alice. Dal messaggio  $\textbf{m}$ Alice estrarr\`a un messaggio fittizio $\textbf{r}$ con $r_i = \frac{m_i}{X_i}$ che corrisponde alla trasmisione su un canale Gaussiano con rumore di varianza $V_i = \frac{V_z}{|X_i|}$.
 
 Per tutti gli elementi del messaggio \textbf{r} vengono calcolati i valori di varianza che a loro volta vengono utilizzati per calcolare le LLRs (log-likelihood ratios) che sono definite come~\cite{gumucs2021novel}:
 \begin{equation}
@@ -109,9 +109,9 @@ Tutte queste operazioni vengono illustrate nell'algoritmo~\ref{al:recon} facendo
 
 
 \subsection{Algoritmi Sum-Product e classic PEG}\label{subse:algorithms}
-L'algoritmo LDPC utilizzato per la decodifica nella simulazione prende in nome di \textit{sum-product}~\ref{al:sum-prod}. Questo algoritmo utilizza la tecnica di \textit{belief propagation} creando per i nodi check e i nodi variabile dei messaggi. Questi messaggi vengono aggiornati ad ogni iterazione dell'algoritmo e permettono, a loro volta, di aggiornaee i valori delle LLRs.
+L'algoritmo LDPC utilizzato per la decodifica nella simulazione prende in nome di \textit{sum-product}~\ref{al:sum-prod}. Questo algoritmo utilizza la tecnica di \textit{belief propagation} creando per i nodi check e i nodi variabile dei messaggi. Questi messaggi vengono aggiornati ad ogni iterazione dell'algoritmo e permettono, a loro volta, di aggiornare i valori delle LLRs.
 
-Per quanto riguarda la codifica abbiamo utilizzato l'algoritmo \textit{classic-peg}, il quale realizza la matrice di parit\`a rappresentata come un grafo partendo dalla dimensione della matrice che si vuole ottenere e da quantit\`a $\Lambda$ che rappresentano le frazioni dei nodi variabile che avranno un certo grado. \`E possibile calcolare le componenti del vettore $\Lambda$ in questo modo:
+Per quanto riguarda la codifica abbiamo utilizzato l'algoritmo \textit{classic-peg}, il quale realizza la matrice di parit\`a rappresentata come un grafo partendo dalla dimensione della matrice che si vuole ottenere e dalle quantit\`a $\Lambda$ che rappresentano le frazioni dei nodi variabile che avranno un certo grado. \`E possibile calcolare le componenti del vettore $\Lambda$ in questo modo:
 \begin{equation}
 \Lambda_i = \frac{r_i}{\sum_i r_i}
 \end{equation}

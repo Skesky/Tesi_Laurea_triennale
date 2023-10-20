@@ -1,7 +1,7 @@
 La QKD (Quantum Key distribution), o Distribuzione Quantistica delle Chiavi, \`e una tecnologia di crittografia quantistica che permette la distribuzione di chiavi crittografiche con un livello di sicurezza inattacabile anche da computer quantistici. La QKD pu\`o essere suddivisa in due macro-classi DV-QKD e CV-QKD. Nella DV-QKD (Discrete-Variable Quantum Key Distribution) le informazioni vengono trasmesse utilizzando stati quantistici discreti, ad esempio la polarizzazione dei fotoni, che viene misurata attraverso apposite apparecchiature per ogni fotone. 
 
-Il primo esempio di protocollo DV-QKD, come accennato nell'introduzione, \`e il BB84. In questo protocollo Alice trasmette sul canale quantistico a Bob una sequenza di fotoni polarizzati in modo casuale in due basi, ognuna delle quali ha due gradi di polarizzazione. Nella prima base il fotone pu\`o essere polarizzato a 0 o 90 gradi e verr\`a considerato come un bit 0, mentre nella seconda a 45 o 135 gradi e verr\`a considerato come bit 1.
-In ricezione Bob effettuer\`a la misura della polarizzazione del fotone scegliendo una base con probabilit\`a uniforme dalle due basi disponibili. Alla fine della trasmissione Bob sar\`a in possesso dei gradi di polarizzazione misurati i quali verranno convertiti in 0 e 1 seguendo la stessa convenzione di Alice. Da notare che parte dei dati di Bob differir\`a da quelli inviati da Alice perch\`e Bob ha effettuato la misura utilizzando la base sbagliata.
+Il primo esempio di protocollo DV-QKD, come accennato nell'introduzione, \`e il BB84. In questo protocollo Alice trasmette sul canale quantistico a Bob una sequenza di fotoni polarizzati in modo casuale in due basi, ognuna delle quali ha due gradi di polarizzazione. Nella prima base il fotone pu\`o essere polarizzato a $0$ o $90$ gradi e verr\`a considerato come un bit $0$, mentre nella seconda a $45$ o $135$ gradi e verr\`a considerato come bit $1$.
+In ricezione Bob effettuer\`a la misura della polarizzazione del fotone scegliendo una base con probabilit\`a uniforme dalle due basi disponibili. Alla fine della trasmissione Bob sar\`a in possesso dei gradi di polarizzazione misurati i quali verranno convertiti in $0$ e $1$ seguendo la stessa convenzione di Alice. Da notare che parte dei dati di Bob differir\`a da quelli inviati da Alice perch\`e Bob ha effettuato la misura utilizzando la base sbagliata.
 Successivamente Bob comunicher\`a ad Alice quale base ha utilizzato per la misura di ogni fotone ed Alice scarter\`a tutti quei fotoni la cui base di trasmissione e misura non combaciano, e lo comunicher\`a a Bob. Fatto ci\`o Alice e Bob saranno in possesso, almeno in teoria, della stessa stringa random di bit.
 Quello che potrebbe succedere \`e che durante la trasmissione Eve intercetti i fotoni inviati da Alice per effettuarne una misura e poi inviare il risultato della propria misura a Bob. Tuttavia questo altererebbe il risultato della misura di Bob perch\`e Eve non pu\`o sapere con quale base \`e stato polarizzato il fotone, e di conseguenza non pu\`o sapere con quale base misurarlo. Misurando un fotone con la base sbagliata nel momento in cui lo ritrasmetter\`a a Bob, egli ricever\`a un fotone polarizzato in modo differente rispetto a quello inviato da Alice. Questo permetter\`a ad Alice e Bob di determinare la presenza di una spia andando a confrontare una porzione di bit misurati con la stessa base utilizzata in trasmissione e quindi ritenuti uguali. Durante il confronto se si riscontrano bit diversi si determina la presenza di una spia. Se Eve ha intercettatto troppi fotoni non viene prodotta nessuna chiave e si ricomincia il protocollo da capo, in caso contrario si utilizzano i bit rimasti segreti come chiave crittografica\cite{zhao_development_2018}.
 
@@ -20,7 +20,7 @@ Il protocollo pu\`o essere suddiviso in due sezioni: la prima sezione ha effetti
 \begin{center}
 \includegraphics[width=\textwidth]{figure/alice_bob_communication.eps} 
 \end{center}
-\caption{Schema di comunicazione tra Alice e Bob Sezione.} \label{fig:alice-bob-schema}
+\caption{Schema di comunicazione tra Alice e Bob.} \label{fig:alice-bob-schema}
 \end{figure}
 
 \subsection{Produzione, trasmissione e ricezione del segnale quantistico}\label{subse:sottosezione2-1-1}
@@ -72,11 +72,11 @@ In caso di misura omodina \`e necessaria un'operazione addizionale cio\'e il sif
 \subsection{Stima dei parametri}\label{subse:stima-parametri}
 Dopo avere terminato la fase di trasmissione, Alice e Bob rivelano una porzione random di dati in modo tale da confrontare ci\`o che \`e stato effettivamente inviato da Alice con le misure di Bob. Da questo confronto sono in grado di stimare l'informazione mutua $I_{AB}$ (informazione mutua tra Alice e Bob) e l'informazione mutua tra Eve e Bob $\chi_{EB}$. Prima della effettiva stima delle mutue informazioni e necessario stimare trasmittanza e rumore del canale e calcolare altre quantit\`a che verranno utilizzare nel calcolo delle mutue informazioni.
 
-Nel'articolo~\cite{https://doi.org/10.1002/qute.201800011} viene calcolata la segiente espressione per l'informazione mutua $I_{AB}$ \`e:
+Nel'articolo~\cite{https://doi.org/10.1002/qute.201800011} viene calcolata la seguente espressione per l'informazione mutua $I_{AB}$:
 \begin{equation} \label{eq:AB-info}
 I_{AB} = \frac{\mu}{2}\log_2(1 + SNR)
 \end{equation}
-con $\mu = 1$ se la misura \`e omodina e $\mu = 2$ per la misura eterodina. Qui la $SNR$ è la signal-to-noise ratio, data da::
+con $\mu = 1$ se la misura \`e omodina e $\mu = 2$ per la misura eterodina. Qui la $SNR$ è la signal-to-noise ratio, data da:
 \begin{equation} \label{eq:snr}
 SNR = \frac{\frac{1}{\mu} T V_{mod}}{1 + \frac{1}{\mu} \xi}
 \end{equation}
@@ -107,7 +107,7 @@ T& = \frac{c^2}{V_{mod}^2 + 2V_{mod}} \\
 \end{split}
 \end{equation}
 
-Ora non ci resta che calcolare $\chi_{EB}$ in questo modo \ref{https://doi.org/10.1002/qute.201800011}:
+Ora non ci resta che calcolare $\chi_{EB}$ in questo modo \cite{https://doi.org/10.1002/qute.201800011}:
 %Ora non ci resta che calcolare le quantit\`a $\nu_1$, $\nu_2$ e $\nu_3$ alle quali verr\`a applicata una funzione $g(\nu)$ che ci porter\`a al calcolo della mutua informazione fra Eve e Bob. Finalmente \`e giunto in momento di calcolare anche $\chi_{EB}$ in questo modo:
 \begin{equation} \label{eq:EB-info}
 \chi_{EB} = g(\nu_1) + g(\nu_2) - g(\nu_3)
@@ -122,7 +122,7 @@ Per fare questo avremo bisogno dei valori delle quantit\`a $\nu_1$, $\nu_2$ e $\
 \end{equation}
 con $z = \sqrt{(a + b)^2 - 4 c^2}$.
 
-La funzione $g(\nu)$ per il calcolo di della mutua informazione fra Eve e Bob \`e definita in questo modo:
+La funzione $g(\nu)$ per il calcolo della mutua informazione fra Eve e Bob \`e definita in questo modo:
 \begin{equation} \label{eq:g}
 g(\nu) = \Bigl (\frac{\nu + 1}{2}\Bigr ) \log_2 \Bigl (\frac{\nu + 1}{2}\Bigr ) - \Bigl (\frac{\nu - 1}{2}\Bigr ) \log_2 \Bigl (\frac{\nu - 1}{2}\Bigr )
 \end{equation}
@@ -163,7 +163,7 @@ Cos\`i facendo abbiamo ottenuto altre due sequenze di dati $\textbf{X}$ e $\text
 
 Il passo successivo per Bob sar\`a quello di generare una stringa di bit random $\textbf{s} \in \{0,1\}^k$. Attraverso algoritmi di codifica LDPC (Low-Density Parity-Check)~\cite{borwankar_low_nodate} viene calcolata una matrice \textbf{H} necessaria per aggiungere alla stringa \textbf{s} dei bit ridondanti di parit\`a ottenendo la stringa $\textbf{c} \in \{0,1\}^n$ dove $n$ corrisponde alla lunghezza della sottosequenza di dati non utilizzati per la stima dei parametri.
 
-I LDPC~\cite{borwankar_low_nodate} che rappresentano una classe di codici correttori di errori utilizzari nell'ambito delle telecomunicazioni. Una delle ragioni per cui questi codici sono largamente utilizzati \`e la loro abilit\`a di raggiungere prestazione vicine alla capacit\`a teorica del canale di comunicazione, nota come il limite di Shannon. I codici LDPC possono essere rappresentati in due modi:
+I LDPC~\cite{borwankar_low_nodate} rappresentano una classe di codici correttori di errori utilizzati nell'ambito delle telecomunicazioni. Una delle ragioni per cui questi codici sono largamente utilizzati \`e la loro abilit\`a di raggiungere prestazione vicine alla capacit\`a teorica del canale di comunicazione, nota come il limite di Shannon. I codici LDPC possono essere rappresentati in due modi:
 \begin{itemize}
 \item come una matrice di dimensioni $M \times N$ dove $N$ rappresenta la dimensione del messaggio che si vuole codificare ed $M = N - k$, con $k$ ottenuto dal prodotto tra $N$ e il code-rate, corrisponde al numero di bit ridondanti nel messaggio codificato, che vengono utilizzati per la correzione degli errori. Questa matrice \`e prevalentemente composta da zeri e contiene un numero limitato di uno.
 \item come una grafo bipartito rappresentato da nodi check e nodi variabile; facendo riferimento alla rappresentazione matriciale il numero di nodi check \`e $M$ (numero di righe della matrice) e quello di nodi variabile \`e $N$ (numero di colonne della matrice). Gli uno contenuti nella matrice, nel grafo, sono denotati dagli archi che collegano un nodo variabile ad un nodo check.
@@ -221,7 +221,7 @@ Gli attacchi presi in considerazione tipicamente sono tre e differiscono per la 
 \end{center}
 \caption[Schema attacco individuale]{Schema che descrive un attacco individuale ponendo attenzione nel mostrare che le operazioni da parte di Eve vengono svolte singolarmente su ogni segnale.} \label{fig:attacco-individuale}
 \end{figure}
-\item \textbf{attacchi collettivi}: Eve salva nella memoria del suo computer quantistico un certo numero di stati sui quali effettua una misura collettiva. Questo attacco \`e pi\`u potente del precedente perch\`e secondo i pricipi della fisica quantistica effettuando una misura collettiva si pu\`o potenzialmente ricavare pi\`u informazione che dalla misura del singolo stato.
+\item \textbf{attacchi collettivi}: Eve salva nella memoria del suo computer quantistico un certo numero di stati sui quali effettua una misura collettiva. Questo attacco \`e pi\`u potente del precedente perch\`e, secondo i pricipi della fisica quantistica, effettuando una misura collettiva si pu\`o potenzialmente ricavare pi\`u informazione che dalla misura del singolo stato.
 \begin{figure}[H] 
 \begin{center}
 \includegraphics[width=0.8\textwidth]{figure/collective_attack.eps} 
